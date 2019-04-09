@@ -1,6 +1,6 @@
-RSpec.describe ModerateParams do
+RSpec.describe ModerateParameters do
   it "has a version number" do
-    expect(ModerateParams::VERSION).not_to be nil
+    expect(ModerateParameters::VERSION).not_to be nil
   end
 
   it "does something useful" do

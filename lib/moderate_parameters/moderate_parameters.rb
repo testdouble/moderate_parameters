@@ -14,7 +14,6 @@ module ActionController
         end
       end
 
-      unpermitted_parameters!(params)
       custom_logging(params, controller_name, action)
       permit!
     end
@@ -23,7 +22,7 @@ module ActionController
 
       def custom_logging(params, controller_name, action)
         unpermitted_keys(params).each do |k|
-          ActiveSupport::Notifications.instrument('moderate_params') do |payload|
+          ActiveSupport::Notifications.instrument('moderate_parameters') do |payload|
              payload[:controller] = controller_name
              payload[:action] = action
              payload[:message] = "#{@context || 'Top Level'} is missing: #{k}"

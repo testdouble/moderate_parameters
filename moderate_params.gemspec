@@ -1,17 +1,17 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "moderate_params/version"
+require "moderate_parameters/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "moderate_params"
-  spec.version       = ModerateParams::VERSION
+  spec.name          = "moderate_parameters"
+  spec.version       = ModerateParameters::VERSION
   spec.authors       = ["Kyle Boe, Mike Calhoun"]
   spec.email         = ["kyle@hint.io, mike@hint.io"]
 
   spec.summary       = %q{Strong Parameters migration tool}
   spec.description   = %q{A tool for migrating Rails applications to Strong Parameters.}
-  spec.homepage      = "https://github.com/hintmedia/moderate_params"
+  spec.homepage      = "https://github.com/hintmedia/moderate_parameters"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

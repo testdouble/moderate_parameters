@@ -1,4 +1,4 @@
-# moderate_params
+# moderate_parameters
 
 In the migration from [protected_attributes](https://github.com/rails/protected_attributes) to [strong_parameters](https://api.rubyonrails.org/classes/ActionController/StrongParameters.html), it can be difficult to determine what data is originating from within the app and what is coming from the internet. `moderate_params` is a tool that provides safety nets and logging of data sources in the controller by extending `ActionController::Parameters` functionality.
 
@@ -7,7 +7,7 @@ In the migration from [protected_attributes](https://github.com/rails/protected_
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'moderate_params'
+gem 'moderate_parameters'
 ```
 
 And then execute:
@@ -16,7 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install moderate_params
+    $ gem install moderate_parameters
 
 ## Usage
 
@@ -50,7 +50,7 @@ class PeopleController < ActionController::Base
 end
 ```
 
-We can add `moderate_params` by following the `strong_parameters` implementation method with a couple slight changes.
+We can add `moderate_parameters` by following the `strong_parameters` implementation method with a couple slight changes.
 
 Add a private params method for the controller calling `moderate` (with `controller_name` and `action_name` as the first two args) instead of `permit`:
 
@@ -73,7 +73,7 @@ end
 This will cause the `person_params` to flow the same way they did before (getting passed to the model without interruption),
 but the params that are not included in the argument of `moderate` will be logged to `/log/moderate_params.log`
 
-Meaning that, after submitting the aforementioned data, our `moderate_params.log` will look like so:
+Meaning that, after submitting the aforementioned data, our `moderate_parameters.log` will look like so:
 
     people#create Top Level is missing: age
     people#create Top Level is missing: height
@@ -96,9 +96,9 @@ class PeopleController < ActionController::Base
 end
 ```
 
-We can then hit submit data from the form at `/people/new` and see that no new lines are added to the `moderate_params.log` file.
+We can then hit submit data from the form at `/people/new` and see that no new lines are added to the `moderate_parameters.log` file.
 
-This means that we can remove `moderate_params` and move to using `permit` as a part of `strong_parameters`:
+This means that we can remove `moderate_parameters` and move to using `permit` as a part of `strong_parameters`:
 
 ```ruby
 class PeopleController < ActionController::Base
@@ -118,7 +118,7 @@ end
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/hintmedia/moderate_params. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/hintmedia/moderate_parameters. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
@@ -126,4 +126,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the moderate_params project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/hintmedia/moderate_params/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the moderate_parameters project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/hintmedia/moderate_parameters/blob/master/CODE_OF_CONDUCT.md).
