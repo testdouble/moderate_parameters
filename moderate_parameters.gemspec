@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["kyle@hint.io, mike@hint.io"]
 
   spec.summary       = %q{Protected Attributes to Strong Parameters migration tool}
-  spec.description   = %q{A tool for migrating Rails applications to Strong Parameters.}
+  spec.description   = %q{A tool for migrating Rails applications from Protected Attributes to Strong Parameters.}
   spec.homepage      = "https://github.com/hintmedia/moderate_parameters"
   spec.license       = "MIT"
 
