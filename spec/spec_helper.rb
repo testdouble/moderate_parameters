@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "moderate_params"
+require "pry"
+require "action_controller"
+require "active_support"
+require "moderate_parameters"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -13,4 +16,17 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+end
+
+def notification_payload_for(notification)
+  payload = nil
+  subscription = ActiveSupport::Notifications.subscribe notification do |name, start, finish, id, _payload|
+    payload = _payload
+  end
+
+  yield
+
+  ActiveSupport::Notifications.unsubscribe(subscription)
+
+  return payload
 end
