@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe ModerateParameters do
   it "has a version number" do
     expect(ModerateParameters::VERSION).not_to be nil
