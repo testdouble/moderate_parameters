@@ -1,6 +1,6 @@
 # Moderate Parameters
 
-In the migration from [protected_attributes](https://github.com/rails/protected_attributes) to [strong_parameters](https://api.rubyonrails.org/classes/ActionController/StrongParameters.html), it can be difficult to determine what data is originating from within the app and what is coming from the internet. Moderate Parameters is a tool that provides safety nets and logging of data sources in the controller by extending `ActionController::Parameters` functionality.
+In our experience with [UpgradeRails](https://www.upgraderails.com), the migration from [protected_attributes](https://github.com/rails/protected_attributes) to [strong_parameters](https://api.rubyonrails.org/classes/ActionController/StrongParameters.html) can leave more questions than answers. It can be difficult to determine what data is originating from within the app and what is coming from the internet. Moderate Parameters is a tool that provides safety nets and logging of data sources in the controller by extending `ActionController::Parameters` functionality.
 
 ## Installation
 
