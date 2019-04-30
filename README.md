@@ -1,4 +1,4 @@
-![Moderate Parameters](https://user-images.githubusercontent.com/4054771/56984869-ecb46a80-6b3b-11e9-98b3-c5d5ab57c499.png)
+![Moderate Parameters](https://user-images.githubusercontent.com/4054771/56985278-db1f9280-6b3c-11e9-8719-f48e2ab4885d.png)
 
 By [Hint.io](https://hint.io)
 
