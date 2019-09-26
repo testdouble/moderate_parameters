@@ -14,13 +14,30 @@ module ActionController
         end
       end
 
-      custom_logging(params, controller_name, action)
+      incoming_params_logging(params, controller_name, action)
       permit!
+    end
+
+    def [](key)
+      internal_params_logging(key, caller_locations)
+      binding.pry
+      if Gem.loaded_specs['railties'].version < Gem::Version.new('5')
+        super
+      else
+        'foobar'
+      end
     end
 
     private
 
-    def custom_logging(params, controller_name, action)
+    def internal_params_logging(key, stack_array)
+      ActiveSupport::Notifications.instrument('moderate_parameters') do |payload|
+          payload[:caller_locations] = stack_array
+          payload[:message] = "#{key} is being read from: #{stack_array.join("\n")}"
+        end
+    end
+
+    def incoming_params_logging(params, controller_name, action)
       unpermitted_keys(params).each do |k|
         ActiveSupport::Notifications.instrument('moderate_parameters') do |payload|
           payload[:controller] = controller_name
