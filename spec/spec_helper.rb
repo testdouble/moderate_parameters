@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "bundler/setup"
-require "pry"
-require "action_controller"
-require "active_support"
-require "moderate_parameters"
+require 'bundler/setup'
+require 'pry'
+require 'action_controller'
+require 'active_support'
+require 'moderate_parameters'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
