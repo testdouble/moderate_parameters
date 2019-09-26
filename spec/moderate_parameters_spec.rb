@@ -16,5 +16,4 @@ RSpec.describe ModerateParameters do
       expect(payload[:message]).to eql('Top Level is missing: age')
     end
   end
-
 end
