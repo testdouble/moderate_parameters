@@ -34,6 +34,8 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
+  spec.required_ruby_version = '>= 2.3.1'
+
   spec.add_dependency 'actionpack', '>= 3.0', '< 6.1'
   spec.add_dependency 'activemodel', '>= 3.0', '< 6.1'
   spec.add_dependency 'activesupport', '>= 3.0', '< 6.1'
