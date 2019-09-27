@@ -21,52 +21,88 @@ RSpec.describe ModerateParameters do
   end
 
   describe '::Breadcrumbs' do
-    before(:each) do
-      ModerateParameters.configure do |c|
-        c.breadcrumbs_enabled = true
+    context 'reads' do
+      before(:each) do
+        ModerateParameters.configure do |c|
+          c.breadcrumb_reads_enabled = true
+          c.breadcrumb_writes_enabled = false
+        end
+      end
+
+      describe '#[]' do
+        def a(test_params)
+          test_params[:person]
+        end
+
+        let(:subject) { a(params) }
+        it 'logs to a file' do
+          payload = notification_payload_for('moderate_parameters') { subject }
+          expect(payload[:message]).to start_with('person is being read on:')
+          expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:34:in \`a'")
+        end
+      end
+
+      describe '#[]=' do
+        def a(test_params)
+          test_params[:person] = nil
+        end
+
+        let(:subject) { a(params) }
+
+        it 'does not log to a file' do
+          payload = notification_payload_for('moderate_parameters') { subject }
+          expect(payload).to be nil
+        end
       end
     end
 
-    describe '#[]' do
-      def a(test_params)
-        test_params[:person]
+    context 'writes' do
+      before(:each) do
+        ModerateParameters.configure do |c|
+          c.breadcrumb_writes_enabled = true
+          c.breadcrumb_reads_enabled = false
+        end
       end
 
-      let(:subject) { a(params) }
-      it 'logs to a file' do
-        payload = notification_payload_for('moderate_parameters') { subject }
-        expect(payload[:message]).to start_with('person is being read on:')
-        expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:32:in \`a'")
-      end
-    end
+      describe '#[]' do
+        def a(test_params)
+          test_params[:person]
+        end
 
-    describe '#[]=' do
-      def a(test_params)
-        b = test_params[:person]
-        b[:age] = 27
+        let(:subject) { a(params) }
+        it 'does not log to a file' do
+          payload = notification_payload_for('moderate_parameters') { subject }
+          expect(payload).to be nil
+        end
       end
 
-      let(:subject) { a(params) }
+      describe '#[]=' do
+        def a(test_params)
+          test_params[:person] = nil
+        end
 
-      it 'logs to a file' do
-        payload = notification_payload_for('moderate_parameters') { subject }
-        expect(payload[:message]).to start_with('age is being overwritten on:')
-        expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:46:in \`a'")
+        let(:subject) { a(params) }
+
+        it 'logs to a file' do
+          payload = notification_payload_for('moderate_parameters') { subject }
+          expect(payload[:message]).to start_with('person is being overwritten on:')
+          expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:81:in \`a'")
+        end
       end
-    end
 
-    describe '#extract!' do
-      def a(test_params)
-        b = test_params.require(:person)
-        b.extract!(:name)
-      end
+      describe '#extract!' do
+        def a(test_params)
+          b = test_params.require(:person)
+          b.extract!(:name)
+        end
 
-      let(:subject) { a(params) }
+        let(:subject) { a(params) }
 
-      it 'logs to a file' do
-        payload = notification_payload_for('moderate_parameters') { subject }
-        expect(payload[:message]).to start_with('extract! is being called with [:name] on:')
-        expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:61:in \`a'")
+        it 'logs to a file' do
+          payload = notification_payload_for('moderate_parameters') { subject }
+          expect(payload[:message]).to start_with('extract! is being called with [:name] on:')
+          expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:96:in \`a'")
+        end
       end
     end
   end
