@@ -7,9 +7,18 @@ require 'moderate_parameters/logger'
 require 'moderate_parameters/parameters'
 require 'moderate_parameters/breadcrumbs'
 
+module ModerateParameters
+  mattr_accessor :breadcrumbs_enabled
+  @@breadcrumbs_enabled = false
+
+  def self.configure
+    yield self
+  end
+end
+
 module ActionController
   class Parameters
-    prepend ModerateParameters::Breadcrumbs
+    prepend ModerateParameters::Breadcrumbs if ModerateParameters.breadcrumbs_enabled
     prepend ModerateParameters::Parameters
   end
 end
