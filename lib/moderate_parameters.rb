@@ -18,7 +18,7 @@ end
 
 module ActionController
   class Parameters
-    prepend ModerateParameters::Breadcrumbs if ModerateParameters.breadcrumbs_enabled
+    prepend ModerateParameters::Breadcrumbs
     prepend ModerateParameters::Parameters
   end
 end
