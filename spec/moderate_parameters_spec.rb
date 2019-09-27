@@ -30,6 +30,7 @@ RSpec.describe ModerateParameters do
       end
 
       describe '#[]' do
+        let(:relative_line) { __LINE__ + 2 }
         def a(test_params)
           test_params[:person]
         end
@@ -38,11 +39,12 @@ RSpec.describe ModerateParameters do
         it 'logs to a file' do
           payload = notification_payload_for('moderate_parameters') { subject }
           expect(payload[:message]).to start_with('person is being read on:')
-          expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:34:in \`a'")
+          expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
         end
       end
 
       describe '#[]=' do
+        let(:relative_line) { __LINE__ + 2 }
         def a(test_params)
           test_params[:person] = nil
         end
@@ -65,6 +67,7 @@ RSpec.describe ModerateParameters do
       end
 
       describe '#[]' do
+        let(:relative_line) { __LINE__ + 2 }
         def a(test_params)
           test_params[:person]
         end
@@ -77,6 +80,7 @@ RSpec.describe ModerateParameters do
       end
 
       describe '#[]=' do
+        let(:relative_line) { __LINE__ + 2 }
         def a(test_params)
           test_params[:person] = nil
         end
@@ -86,14 +90,14 @@ RSpec.describe ModerateParameters do
         it 'logs to a file' do
           payload = notification_payload_for('moderate_parameters') { subject }
           expect(payload[:message]).to start_with('person is being overwritten on:')
-          expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:81:in \`a'")
+          expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
         end
       end
 
       describe '#extract!' do
+        let(:relative_line) { __LINE__ + 2 }
         def a(test_params)
-          b = test_params.require(:person)
-          b.extract!(:name)
+          test_params.require(:person).extract!(:name)
         end
 
         let(:subject) { a(params) }
@@ -101,7 +105,7 @@ RSpec.describe ModerateParameters do
         it 'logs to a file' do
           payload = notification_payload_for('moderate_parameters') { subject }
           expect(payload[:message]).to start_with('extract! is being called with [:name] on:')
-          expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:96:in \`a'")
+          expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
         end
       end
     end
