@@ -8,8 +8,11 @@ require 'moderate_parameters/parameters'
 require 'moderate_parameters/breadcrumbs'
 
 module ModerateParameters
-  mattr_accessor :breadcrumbs_enabled
-  @@breadcrumbs_enabled = false
+  mattr_accessor :breadcrumb_reads_enabled
+  @@breadcrumb_reads_enabled = false
+
+  mattr_accessor :breadcrumb_writes_enabled
+  @@breadcrumb_writes_enabled = false
 
   def self.configure
     yield self
