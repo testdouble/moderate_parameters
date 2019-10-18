@@ -3,17 +3,17 @@
 module ModerateParameters
   module Breadcrumbs
     def [](key)
-      internal_param_logging(key, 'read', caller_locations) if ModerateParameters.breadcrumb_reads_enabled
+      internal_param_logging(key, 'read', caller_locations) if ModerateParameters.breadcrumbs_enabled
       super
     end
 
     def []=(key, value)
-      internal_param_logging(key, 'overwritten', caller_locations) if ModerateParameters.breadcrumb_writes_enabled
+      internal_param_logging(key, 'overwritten', caller_locations) if ModerateParameters.breadcrumbs_enabled
       super
     end
 
     def extract!(*keys)
-      internal_method_logging('extract!', keys, caller_locations) if ModerateParameters.breadcrumb_writes_enabled
+      internal_method_logging('extract!', keys, caller_locations) if ModerateParameters.breadcrumbs_enabled
       super
     end
 
