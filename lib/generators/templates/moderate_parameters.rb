@@ -2,10 +2,6 @@
 
 ModerateParameters.configure do |config|
   # Enables/Disables logging occurrences of
-  # reading from ActionController::Parameters.
-  config.breadcrumb_reads_enabled = false
-
-  # Enables/Disables logging occurrences of
-  # writing to ActionController::Parameters.
-  config.breadcrumb_writes_enabled = false
+  # reading/writing from ActionController::Parameters.
+  config.breadcrumbs_enabled = false
 end
