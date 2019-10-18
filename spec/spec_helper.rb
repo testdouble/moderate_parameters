@@ -17,14 +17,14 @@ RSpec.configure do |config|
 end
 
 def notification_payload_for(notification)
-  payload = nil
-  ActiveSupport::Notifications.subscribe(notification) do |name, start, finish, id, _payload|
-    payload = _payload
+  test_payload = nil
+  ActiveSupport::Notifications.subscribe(notification) do |_, _, _, _, payload|
+    test_payload = payload
   end
 
   yield
 
   ActiveSupport::Notifications.unsubscribe(notification)
 
-  payload
+  test_payload
 end
