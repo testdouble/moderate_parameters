@@ -34,7 +34,7 @@ module ActionController
       value.is_a?(Array) || value.is_a?(Parameters)
     end
 
-    EMPTY_HASH = {}
+    EMPTY_HASH ||= {}
     def cust_hash_filter(params, filter, controller_name, action)
       filter = filter.with_indifferent_access
 
