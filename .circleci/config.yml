@@ -42,6 +42,14 @@ jobs:
           key: v1-dependencies-{{ checksum "gemfiles/rails_6_0.gemfile.lock" }}
 
   test_rails_6_0:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.6.2
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          RAILS_ENV: test
     steps:
       - run:
           name: run tests
@@ -95,6 +103,14 @@ jobs:
           key: v1-dependencies-{{ checksum "gemfiles/rails_5_2.gemfile.lock" }}
 
   test_rails_5_2:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.6.2
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          RAILS_ENV: test
     steps:
       - run:
           name: run tests
@@ -148,6 +164,14 @@ jobs:
           key: v1-dependencies-{{ checksum "gemfiles/rails_5_1.gemfile.lock" }}
 
   test_rails_5_1:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.6.2
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          RAILS_ENV: test
     steps:
       - run:
           name: run tests
@@ -201,6 +225,14 @@ jobs:
           key: v1-dependencies-{{ checksum "gemfiles/rails_5_0.gemfile.lock" }}
 
   test_rails_5_0:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.6.2
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          RAILS_ENV: test
     steps:
       - run:
           name: run tests
@@ -254,6 +286,14 @@ jobs:
           key: v1-dependencies-{{ checksum "gemfiles/rails_4_2.gemfile.lock" }}
 
   test_rails_4_2:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.6.2
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          RAILS_ENV: test
     steps:
       - run:
           name: run tests
