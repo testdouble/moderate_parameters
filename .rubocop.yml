@@ -1,0 +1,4 @@
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'moderate_parameters.gemspec'
