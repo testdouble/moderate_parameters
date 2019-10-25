@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module ActionController
-  class Parameters
+module ModerateParameters
+  module Parameters
     def moderate(controller_name, action, *filters)
       params = self.class.new
 
@@ -14,13 +14,13 @@ module ActionController
         end
       end
 
-      custom_logging(params, controller_name, action)
+      incoming_params_logging(params, controller_name, action)
       permit!
     end
 
     private
 
-    def custom_logging(params, controller_name, action)
+    def incoming_params_logging(params, controller_name, action)
       unpermitted_keys(params).each do |k|
         ActiveSupport::Notifications.instrument('moderate_parameters') do |payload|
           payload[:controller] = controller_name
