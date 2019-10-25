@@ -20,6 +20,12 @@ Or install it yourself as:
 
     $ gem install moderate_parameters
 
+Then add the initializer by running:
+
+    $ bundle exec rails g moderate_parameters:install
+
+This will add an initializer to your rails app for turning on/off functionality.
+
 ## Usage
 
 Given a form at `/people/new` that submits data to the `PeopleController#create` action like so:
