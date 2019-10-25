@@ -51,6 +51,11 @@ jobs:
           BUNDLE_PATH: vendor/bundle
           RAILS_ENV: test
     steps:
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "gemfiles/rails_4_2.gemfile.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
       - run:
           name: run tests
           command: |
@@ -112,6 +117,11 @@ jobs:
           BUNDLE_PATH: vendor/bundle
           RAILS_ENV: test
     steps:
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "gemfiles/rails_4_2.gemfile.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
       - run:
           name: run tests
           command: |
@@ -173,6 +183,11 @@ jobs:
           BUNDLE_PATH: vendor/bundle
           RAILS_ENV: test
     steps:
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "gemfiles/rails_4_2.gemfile.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
       - run:
           name: run tests
           command: |
@@ -234,6 +249,11 @@ jobs:
           BUNDLE_PATH: vendor/bundle
           RAILS_ENV: test
     steps:
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "gemfiles/rails_4_2.gemfile.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
       - run:
           name: run tests
           command: |
@@ -295,6 +315,11 @@ jobs:
           BUNDLE_PATH: vendor/bundle
           RAILS_ENV: test
     steps:
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "gemfiles/rails_4_2.gemfile.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
       - run:
           name: run tests
           command: |
