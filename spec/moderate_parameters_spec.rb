@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe ModerateParameters do
-  let(:params) { ActionController::Parameters.new(person: { name: 'Francesco', age: '25' }) }
+  let(:params) { ActionController::Parameters.new(person: { name: 'Francesco', age: '25', sub_array: [:foo, :bar], sub_hash: { foo: :bar } }) }
 
   it 'has a version number' do
     expect(ModerateParameters::VERSION).not_to be nil
@@ -9,8 +9,8 @@ RSpec.describe ModerateParameters do
 
   describe '::Parameters' do
     describe '#moderate' do
-      let(:subject) { params.require(:person).moderate('controller', 'action', :name) }
-
+      let(:subject) { params.require(:person).moderate('controller', 'action', :name, { sub_array: [], sub_hash: {} }) }
+      # params.permit(:name, {:emails => []}, :friends => [ :name, { :family => [ :name ], :hobbies => [] }])
       it 'logs to a file' do
         payload = notification_payload_for('moderate_parameters') { subject }
         expect(payload[:controller]).to eql('controller')

@@ -35,6 +35,7 @@ module ModerateParameters
     end
 
     EMPTY_HASH ||= {}
+    EMPTY_ARRAY ||= []
     def cust_hash_filter(params, filter, controller_name, action)
       filter = filter.with_indifferent_access
 
