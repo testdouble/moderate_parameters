@@ -11,7 +11,7 @@ module ModerateParameters
   @@breadcrumbs_enabled = false
 
   mattr_accessor :logger
-  @@logger = ActiveSupport::Logger.new('log/moderate_parameters.log')
+  @@logger = nil
 
   def self.configure
     yield self
