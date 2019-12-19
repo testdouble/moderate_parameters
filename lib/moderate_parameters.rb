@@ -4,6 +4,7 @@ require 'action_controller'
 require 'active_support'
 require 'moderate_parameters/version'
 require 'moderate_parameters/parameters'
+require 'moderate_parameters/breadcrumbs'
 
 module ModerateParameters
   mattr_accessor :breadcrumbs_enabled
@@ -24,5 +25,4 @@ module ActionController
   end
 end
 
-require 'moderate_parameters/breadcrumbs'
 require 'moderate_parameters/logger'
