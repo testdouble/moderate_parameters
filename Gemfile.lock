@@ -95,7 +95,7 @@ PLATFORMS
 
 DEPENDENCIES
   appraisal (= 2.2.0)
-  bundler (~> 2.0.1)
+  bundler (~> 2.0)
   moderate_parameters!
   pry (~> 0.12.2)
   rake (~> 10.0)
