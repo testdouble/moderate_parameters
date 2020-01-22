@@ -1,21 +1,41 @@
 # frozen_string_literal: true
 
 RSpec.describe ModerateParameters do
-  let(:params) { ActionController::Parameters.new(person: { name: 'Francesco', age: '25', sub_array: [:foo, :bar], sub_hash: { foo: :bar } }) }
+  let(:params) { ActionController::Parameters.new(person: { name: 'Francesco', age: '25', sub_array: [:foo, :bar], sub_hash: { baz: :bang } }) }
 
   it 'has a version number' do
     expect(ModerateParameters::VERSION).not_to be nil
   end
 
   describe '::Parameters' do
+    let(:subject) { params.require(:person).moderate('controller', 'action', :name, { sub_array: [], sub_hash: {} }) }
     describe '#moderate' do
-      let(:subject) { params.require(:person).moderate('controller', 'action', :name, { sub_array: [], sub_hash: {} }) }
       # params.permit(:name, {:emails => []}, :friends => [ :name, { :family => [ :name ], :hobbies => [] }])
       it 'logs to a file' do
         payload = notification_payload_for('moderate_parameters') { subject }
         expect(payload[:controller]).to eql('controller')
         expect(payload[:action]).to eql('action')
         expect(payload[:message]).to eql('Top Level is missing: age')
+      end
+
+      context 'key present but missing array value' do
+        let(:subject) { params.require(:person).moderate('controller', 'action', :name, :age, :sub_array, { sub_hash: {} }) }
+        it 'logs to a file' do
+          payload = notification_payload_for('moderate_parameters') { subject }
+          expect(payload[:controller]).to eql('controller')
+          expect(payload[:action]).to eql('action')
+          expect(payload[:message]).to eql('Top Level is missing: [] value for sub_array')
+        end
+      end
+
+      context 'key present but missing hash value' do
+        let(:subject) { params.require(:person).moderate('controller', 'action', :name, :age, { sub_array: [] }, :sub_hash) }
+        it 'logs to a file' do
+          payload = notification_payload_for('moderate_parameters') { subject }
+          expect(payload[:controller]).to eql('controller')
+          expect(payload[:action]).to eql('action')
+          expect(payload[:message]).to eql('Top Level is missing: {} value for sub_hash')
+        end
       end
     end
   end
