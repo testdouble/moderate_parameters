@@ -5,7 +5,7 @@
 
 By [Hint.io](https://hint.io)
 
-[![CircleCI](https://circleci.com/gh/hintmedia/moderate_parameters.svg?style=svg)](https://circleci.com/gh/hintmedia/moderate_parameters) [![Gem Version](https://badge.fury.io/rb/moderate_parameters.svg)](https://badge.fury.io/rb/moderate_parameters)
+[![Gem Version](https://badge.fury.io/rb/moderate_parameters.svg)](https://badge.fury.io/rb/moderate_parameters) [![CircleCI](https://circleci.com/gh/hintmedia/moderate_parameters.svg?style=svg)](https://circleci.com/gh/hintmedia/moderate_parameters) [![Maintainability](https://api.codeclimate.com/v1/badges/4971eb01d5bd98dbac8b/maintainability)](https://codeclimate.com/github/hintmedia/moderate_parameters/maintainability)
 
 In our experience with [UpgradeRails](https://www.upgraderails.com), the migration from [protected_attributes](https://github.com/rails/protected_attributes) to [strong_parameters](https://api.rubyonrails.org/classes/ActionController/StrongParameters.html) can leave more questions than answers. It can be difficult to determine what data is originating from within the app and what is coming from the internet.
 
