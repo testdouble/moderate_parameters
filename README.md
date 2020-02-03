@@ -113,7 +113,7 @@ end
 
 We can then hit submit data from the form at `/people/new` and see that no new lines are added to the `moderate_parameters.log` file.
 
-This means that we can remove `moderate_parameters` and move to using `permit` as a part of `strong_parameters`:
+This means that we can remove `moderate_parameters` and move to using `permit` as the final migration step of `strong_parameters`:
 
 ```ruby
 class PeopleController < ActionController::Base
@@ -128,6 +128,17 @@ class PeopleController < ActionController::Base
     def person_params
       params.require(:person).permit(:name, :age, :height)
     end
+end
+```
+
+It is only _**AFTER**_ this final step of the `strong_parameters` migration has been completed that you can safely remove the `protected_attributes` line in the model:
+
+```ruby
+class Person < ActiveRecord::Base
+  # attr_accessible :name, :age, :height
+
+  . . .
+
 end
 ```
 
