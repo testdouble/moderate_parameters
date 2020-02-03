@@ -19,7 +19,7 @@ module ModerateParameters
       end
 
       incoming_params_logging(params, controller_name, action)
-      permit!
+      dup.permit!
     end
 
     private
