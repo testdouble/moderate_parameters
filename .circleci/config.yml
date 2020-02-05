@@ -33,6 +33,7 @@ jobs:
           name: ls
           command: |
             ls -alh
+            printenv
             ls .bundle
       - run:
           name: Which Bundler?
