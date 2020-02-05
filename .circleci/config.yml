@@ -347,7 +347,7 @@ workflows:
   build_and_test_rails_versions:
     jobs:
       - build
-      - rails-6-0
+      - rails-6-0:
           requires:
             - build
       # - build-rails-5-2
