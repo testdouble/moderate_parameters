@@ -18,6 +18,12 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Which Bundler?
+          command: which bundle
+      - run:
+          name: Bundler Version?
+          command: bundle -v
+      - run:
           name: pwd
           command: pwd
       # - restore_cache:
