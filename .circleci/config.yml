@@ -31,7 +31,13 @@ jobs:
       - run:
           name: Appraisal Install
           command: |
-            gem install bundler:2.1.4
+            gem update --system
+            gem uninstall bundler
+            rm /usr/local/bin/bundle
+            rm /usr/local/bin/bundler
+            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
             bundle install
             bundle exec appraisal install
       - save_cache:
