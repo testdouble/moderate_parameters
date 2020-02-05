@@ -30,6 +30,11 @@ jobs:
             source $BASH_ENV
             gem install bundler
       - run:
+          name: ls
+          command: |
+            ls -alh
+            ls .bundle
+      - run:
           name: Which Bundler?
           command: which bundle
       - run:
