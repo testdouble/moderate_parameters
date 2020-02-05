@@ -17,38 +17,22 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - run:
-          name: pwd
-          command: pwd
       # - restore_cache:
       #     keys:
       #       - v1-dependencies-{{ checksum "Gemfile.lock" }}
-      - run:
-          name: Which Bundler?
-          command: which bundle
-      - run:
-          name: Configure Bundler
-          command: |
-            sudo gem uninstall bundler
-            which bundle
-            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
-            source $BASH_ENV
-            gem install bundler
-      - run:
-          name: Which Bundler?
-          command: which bundle
-      - run:
-          name: Bundle Install
-          command: bundle install
-      - run:
-          name: Which Bundler?
-          command: which bundle
-      - run:
-          name: Bundler Version?
-          command: bundle -v
+      # - run:
+      #     name: Configure Bundler
+      #     command: |
+      #       sudo gem uninstall bundler
+      #       which bundle
+      #       echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+      #       source $BASH_ENV
+      #       gem install bundler
       - run:
           name: Appraisal Install
-          command: bundle exec appraisal install
+          command: |
+            gem install bundler:2.1.4
+            bundle exec appraisal install
       - save_cache:
           paths:
             - ~/.bundle
