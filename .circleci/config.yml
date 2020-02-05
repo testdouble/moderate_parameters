@@ -17,6 +17,12 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - run:
+          name: pwd
+          command: pwd
+      - run:
+          name: ls
+          command: ls -alh
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "Gemfile.lock" }}
