@@ -31,26 +31,28 @@ jobs:
         environment:
           BUNDLE_JOBS: 3
           BUNDLE_RETRY: 3
-          # BUNDLE_PATH: vendor/bundle
+          BUNDLE_PATH: vendor/bundle
           RAILS_ENV: test
 
     steps:
       - checkout
       - run:
-          name: Which bundler?
-          command: which bundle
-      - run:
-          name: Which bundler version?
-          command: bundle -v
+          name: Configure Bundler
+          command: |
+            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "gemfiles/rails_6_0.gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
+
       - run:
           name: install dependencies
           command: |
-            bundle install --gemfile='./gemfiles/rails_6_0.gemfile'
+            bundle install --gemfile='./gemfiles/rails_6_0.gemfile' --path vendor/bundle
+
       - save_cache:
           paths:
             - vendor/bundle
