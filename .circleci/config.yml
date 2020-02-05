@@ -1,11 +1,11 @@
 defaults: &defaults
   docker:
     - image: circleci/ruby:2.6.5
-  environment:
-    BUNDLE_JOBS: 3
-    BUNDLE_RETRY: 3
-    BUNDLE_PATH: ~/.bundle
-    RAILS_ENV: test
+      environment:
+        BUNDLE_JOBS: 3
+        BUNDLE_RETRY: 3
+        # BUNDLE_PATH: ~/.bundle
+        RAILS_ENV: test
 
 # Ruby CircleCI 2.0 configuration file
 #
@@ -16,6 +16,12 @@ jobs:
   build:
     <<: *defaults
     steps:
+      - run:
+          name: Which Bundler?
+          command: which bundle
+      - run:
+          name: Bundler Version?
+          command: bundle -v
       - checkout
       - run:
           name: Which Bundler?
