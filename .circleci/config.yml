@@ -31,18 +31,19 @@ jobs:
       - run:
           name: Appraisal Install
           command: |
-            sudo gem update --system
-            sudo rm /usr/local/bin/bundle
-            sudo rm /usr/local/bin/bundler
+            # sudo gem update --system
+            # sudo rm /usr/local/bin/bundle
+            # sudo rm /usr/local/bin/bundler
             echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
             source $BASH_ENV
             gem install bundler
+            bundler -v
             bundle install
             bundle exec appraisal install
-      - save_cache:
-          paths:
-            - ~/.bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+      # - save_cache:
+      #     paths:
+      #       - ~/.bundle
+      #     key: v1-dependencies-{{ checksum "Gemfile.lock" }}
   rails-6-0:
     <<: *defaults
     steps:
