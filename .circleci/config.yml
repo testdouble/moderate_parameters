@@ -20,12 +20,9 @@ jobs:
       - run:
           name: pwd
           command: pwd
-      - run:
-          name: ls
-          command: ls -alh
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "Gemfile.lock" }}
+      # - restore_cache:
+      #     keys:
+      #       - v1-dependencies-{{ checksum "Gemfile.lock" }}
       - run:
           name: Configure Bundler
           command: |
@@ -33,8 +30,17 @@ jobs:
             source $BASH_ENV
             gem install bundler
       - run:
+          name: Which Bundler?
+          command: which bundle
+      - run:
           name: Bundle Install
           command: bundle install
+      - run:
+          name: Which Bundler?
+          command: which bundle
+      - run:
+          name: Bundler Version?
+          command: bundle -v
       - run:
           name: Appraisal Install
           command: bundle exec appraisal install
