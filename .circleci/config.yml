@@ -362,7 +362,7 @@ workflows:
       # - build-rails-5-1
       # - build-rails-5-0
       # - build-rails-4-2
-      - test_rails_6_0:
+      - test-rails-6-0:
           requires:
             - build-rails-6-0
       # - test_rails_5_2:
