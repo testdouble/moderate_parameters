@@ -32,6 +32,7 @@ jobs:
           name: Appraisal Install
           command: |
             gem install bundler:2.1.4
+            bundle install
             bundle exec appraisal install
       - save_cache:
           paths:
