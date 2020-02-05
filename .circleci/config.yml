@@ -24,10 +24,10 @@ defaults: &defaults
 #
 version: 2
 jobs:
-  build-rails-6-0:
+  rails-6-0:
     docker:
       # specify the version you desire here
-      - image: circleci/ruby:2.6.2
+      - image: circleci/ruby:2.6.5
         environment:
           BUNDLE_JOBS: 3
           BUNDLE_RETRY: 3
@@ -54,28 +54,12 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            bundle install --gemfile='./gemfiles/rails_6_0.gemfile' --path vendor/bundle
+            bundle install --gemfile='./gemfiles/rails_6_0.gemfile' --path ./vendor/bundle
 
       - save_cache:
           paths:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "gemfiles/rails_6_0.gemfile.lock" }}
-
-  test-rails-6-0:
-    docker:
-      # specify the version you desire here
-      - image: circleci/ruby:2.6.2
-        environment:
-          BUNDLE_JOBS: 3
-          BUNDLE_RETRY: 3
-          BUNDLE_PATH: vendor/bundle
-          RAILS_ENV: test
-    steps:
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "gemfiles/rails_6_0.gemfile.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
       - run:
           name: run tests
           command: |
@@ -357,14 +341,11 @@ workflows:
   version: 2
   build_and_test_rails_versions:
     jobs:
-      - build-rails-6-0
+      - rails-6-0
       # - build-rails-5-2
       # - build-rails-5-1
       # - build-rails-5-0
       # - build-rails-4-2
-      - test-rails-6-0:
-          requires:
-            - build-rails-6-0
       # - test_rails_5_2:
       #     requires:
       #       - build-rails-5-2
