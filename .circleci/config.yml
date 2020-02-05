@@ -27,6 +27,9 @@ jobs:
           name: Which Bundler?
           command: which bundle
       - run:
+          name: Bundler version?
+          command: bundle -v
+      - run:
           name: Configure Bundler
           command: |
             gem uninstall bundler
