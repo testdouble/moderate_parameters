@@ -4,7 +4,7 @@ defaults: &defaults
       environment:
         BUNDLE_JOBS: 3
         BUNDLE_RETRY: 3
-        # BUNDLE_PATH: ~/.bundle
+        BUNDLE_PATH: ~/.bundle
         RAILS_ENV: test
 
 # Ruby CircleCI 2.0 configuration file
@@ -16,19 +16,7 @@ jobs:
   build:
     <<: *defaults
     steps:
-      - run:
-          name: Which Bundler?
-          command: which bundle
-      - run:
-          name: Bundler Version?
-          command: bundle -v
       - checkout
-      - run:
-          name: Which Bundler?
-          command: which bundle
-      - run:
-          name: Bundler Version?
-          command: bundle -v
       - run:
           name: pwd
           command: pwd
@@ -38,6 +26,8 @@ jobs:
       - run:
           name: Configure Bundler
           command: |
+            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
             gem install bundler
       - run:
           name: Which Bundler?
@@ -53,9 +43,7 @@ jobs:
           command: bundle -v
       - run:
           name: Appraisal Install
-          command: |
-            bundle -v
-            bundle exec appraisal install
+          command: bundle exec appraisal install
       - save_cache:
           paths:
             - ~/.bundle
