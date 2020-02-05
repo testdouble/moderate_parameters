@@ -1,9 +1,9 @@
-appraise 'rails-4-2' do
-  gem 'actionpack', '4.2.11.1'
-  gem 'activemodel', '4.2.11.1'
-  gem 'activesupport', '4.2.11.1'
-  gem 'railties', '4.2.11.1'
-end
+# appraise 'rails-4-2' do
+#   gem 'actionpack', '4.2.11.1'
+#   gem 'activemodel', '4.2.11.1'
+#   gem 'activesupport', '4.2.11.1'
+#   gem 'railties', '4.2.11.1'
+# end
 
 appraise 'rails-5-0' do
   gem 'actionpack', '5.0.7.2'
