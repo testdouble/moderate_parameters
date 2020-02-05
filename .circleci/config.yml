@@ -43,7 +43,9 @@ jobs:
           command: bundle -v
       - run:
           name: Appraisal Install
-          command: bundle exec appraisal install
+          command: |
+            bundle -v
+            bundle exec appraisal install
       - save_cache:
           paths:
             - ~/.bundle
