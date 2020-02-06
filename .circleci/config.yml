@@ -10,7 +10,6 @@ jobs:
         environment:
           BUNDLE_JOBS: 3
           BUNDLE_RETRY: 3
-          BUNDLE_PATH: ~/.bundle
           RAILS_ENV: test
     steps:
       - checkout
@@ -32,6 +31,7 @@ jobs:
               circleci tests split --split-by=timings)"
 
             bundle exec appraisal rails-4-2 rspec \
+              --gemfile='gemfiles/rails_4_2.gemfile' \
               --format progress \
               --format RspecJunitFormatter \
               --out /tmp/test-results/rspec.xml \
@@ -65,6 +65,7 @@ jobs:
               circleci tests split --split-by=timings)"
 
             bundle exec appraisal rails-5-0 rspec \
+              --gemfile='gemfiles/rails_5_0.gemfile' \
               --format progress \
               --format RspecJunitFormatter \
               --out /tmp/test-results/rspec.xml \
@@ -98,6 +99,7 @@ jobs:
               circleci tests split --split-by=timings)"
 
             bundle exec appraisal rails-5-1 rspec \
+              --gemfile='gemfiles/rails_5_1.gemfile' \
               --format progress \
               --format RspecJunitFormatter \
               --out /tmp/test-results/rspec.xml \
@@ -131,6 +133,7 @@ jobs:
               circleci tests split --split-by=timings)"
 
             bundle exec appraisal rails-5-2 rspec \
+              --gemfile='gemfiles/rails_5_2.gemfile' \
               --format progress \
               --format RspecJunitFormatter \
               --out /tmp/test-results/rspec.xml \
