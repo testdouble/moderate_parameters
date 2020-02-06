@@ -20,24 +20,28 @@ jobs:
       # - restore_cache:
       #     keys:
       #       - v1-dependencies-{{ checksum "Gemfile.lock" }}
-      # - run:
-      #     name: Configure Bundler
-      #     command: |
-      #       sudo gem uninstall bundler
-      #       which bundle
-      #       echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
-      #       source $BASH_ENV
-      #       gem install bundler
       - run:
-          name: Appraisal Install
+          name: Configure Bundler
           command: |
             sudo gem update --system
             echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
             source $BASH_ENV
             gem install bundler
-            bundler -v
-            bundle install
-            bundle exec appraisal install
+      - run:
+          name: Bundle Install
+          command: bundle install
+      - run:
+          name: Appraisal Install
+          command: bundle exec appraisal install
+      - persist_to_workspace:
+          root: /usr/local/bin
+          paths:
+            - bundle
+            - gem
+      - persist_to_workspace:
+          root: ~/.bundle
+          paths:
+            - ruby
       # - save_cache:
       #     paths:
       #       - ~/.bundle
@@ -46,11 +50,15 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "Gemfile.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+      - attach_workspace:
+          at: /usr/local/bin
+      - attach_workspace:
+          at: ~/.bundle
+      # - restore_cache:
+      #     keys:
+      #       - v1-dependencies-{{ checksum "Gemfile.lock" }}
+      #       # fallback to using the latest cache if no exact match is found
+      #       - v1-dependencies-
       - run:
           name: Check Bundle
           command: bundle check
