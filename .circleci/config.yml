@@ -5,14 +5,13 @@
 version: 2
 jobs:
   rails-4-2:
-    build:
-      docker:
-        - image: circleci/ruby:2.4
-          environment:
-            BUNDLE_JOBS: 3
-            BUNDLE_RETRY: 3
-            BUNDLE_PATH: ~/.bundle
-            RAILS_ENV: test
+    docker:
+      - image: circleci/ruby:2.4
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: ~/.bundle
+          RAILS_ENV: test
     steps:
       - checkout
       - run:
@@ -42,14 +41,13 @@ jobs:
               --format progress \
               $TEST_FILES
   rails-5-0:
-    build:
-      docker:
-        - image: circleci/ruby:2.4
-          environment:
-            BUNDLE_JOBS: 3
-            BUNDLE_RETRY: 3
-            BUNDLE_PATH: ~/.bundle
-            RAILS_ENV: test
+    docker:
+      - image: circleci/ruby:2.4
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: ~/.bundle
+          RAILS_ENV: test
     steps:
       - checkout
       - run:
@@ -79,14 +77,13 @@ jobs:
               --format progress \
               $TEST_FILES
   rails-5-1:
-    build:
-      docker:
-        - image: circleci/ruby:2.5
-          environment:
-            BUNDLE_JOBS: 3
-            BUNDLE_RETRY: 3
-            BUNDLE_PATH: ~/.bundle
-            RAILS_ENV: test
+    docker:
+      - image: circleci/ruby:2.5
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: ~/.bundle
+          RAILS_ENV: test
     steps:
       - checkout
       - run:
@@ -116,14 +113,13 @@ jobs:
               --format progress \
               $TEST_FILES
   rails-5-2:
-    build:
-      docker:
-        - image: circleci/ruby:2.6.5
-          environment:
-            BUNDLE_JOBS: 3
-            BUNDLE_RETRY: 3
-            BUNDLE_PATH: ~/.bundle
-            RAILS_ENV: test
+    docker:
+      - image: circleci/ruby:2.6.5
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: ~/.bundle
+          RAILS_ENV: test
     steps:
       - checkout
       - run:
