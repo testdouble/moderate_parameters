@@ -1,30 +1,25 @@
-defaults: &defaults
-  docker:
-    - image: circleci/ruby:2.6.5
-      environment:
-        BUNDLE_JOBS: 3
-        BUNDLE_RETRY: 3
-        BUNDLE_PATH: ~/.bundle
-        RAILS_ENV: test
-
 # Ruby CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
 version: 2
 jobs:
-  build:
-    <<: *defaults
+  rails-4-2:
+    build:
+      docker:
+        - image: circleci/ruby:2.4
+          environment:
+            BUNDLE_JOBS: 3
+            BUNDLE_RETRY: 3
+            BUNDLE_PATH: ~/.bundle
+            RAILS_ENV: test
     steps:
       - checkout
-      # - restore_cache:
-      #     keys:
-      #       - v1-dependencies-{{ checksum "Gemfile.lock" }}
       - run:
           name: Configure Bundler
           command: |
             sudo gem update --system
-            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+            echo 'export BUNDLER_VERSION=$(cat "gemfiles/rails_4_2.gemfile" | tail -1 | tr -d " ")' >> $BASH_ENV
             source $BASH_ENV
             gem install bundler
       - run:
@@ -33,353 +28,135 @@ jobs:
       - run:
           name: Appraisal Install
           command: bundle exec appraisal install
-      - persist_to_workspace:
-          root: /usr/local/bin
-          paths:
-            - bundle
-            - gem
-      - persist_to_workspace:
-          root: ~/.bundle
-          paths:
-            - ruby
-      # - save_cache:
-      #     paths:
-      #       - ~/.bundle
-      #     key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-  rails-6-0:
-    <<: *defaults
+      - run:
+          name: Run Tests
+          command: |
+            mkdir /tmp/test-results
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
+              circleci tests split --split-by=timings)"
+
+            bundle exec appraisal rails-4-2 rspec \
+              --format progress \
+              --format RspecJunitFormatter \
+              --out /tmp/test-results/rspec.xml \
+              --format progress \
+              $TEST_FILES
+  rails-5-0:
+    build:
+      docker:
+        - image: circleci/ruby:2.4
+          environment:
+            BUNDLE_JOBS: 3
+            BUNDLE_RETRY: 3
+            BUNDLE_PATH: ~/.bundle
+            RAILS_ENV: test
     steps:
       - checkout
       - run:
-          name: Remove Old Bundler
+          name: Configure Bundler
           command: |
-            sudo rm /usr/local/bin/bundle
-            sudo rm /usr/local/bin/gem
-      - attach_workspace:
-          at: /usr/local/bin
-      - attach_workspace:
-          at: ~/.bundle
-      # - restore_cache:
-      #     keys:
-      #       - v1-dependencies-{{ checksum "Gemfile.lock" }}
-      #       # fallback to using the latest cache if no exact match is found
-      #       - v1-dependencies-
+            sudo gem update --system
+            echo 'export BUNDLER_VERSION=$(cat "gemfiles/rails_5_0.gemfile.lock" | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
       - run:
-          name: Check Bundle
-          command: bundle check
-      # - run:
-      #     name: Configure Bundler
-      #     command: |
-      #       echo 'export BUNDLER_VERSION=$(cat gemfiles/rails_6_0.gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
-      #       source $BASH_ENV
-      #       gem install bundler
-      # - run:
-      #     name: install dependencies
-      #     command: |
-      #       bundle install --gemfile='./gemfiles/rails_6_0.gemfile'
+          name: Bundle Install
+          command: bundle install
+      - run:
+          name: Appraisal Install
+          command: bundle exec appraisal install
+      - run:
+          name: Run Tests
+          command: |
+            mkdir /tmp/test-results
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
+              circleci tests split --split-by=timings)"
 
-      # - save_cache:
-      #     paths:
-      #       - ~/.bundle
-      #     key: v1-dependencies-{{ checksum "gemfiles/rails_6_0.gemfile.lock" }}
-      # - run:
-      #     name: run tests
-      #     command: |
-      #       mkdir /tmp/test-results
-      #       TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-      #         circleci tests split --split-by=timings)"
+            bundle exec appraisal rails-5-0 rspec \
+              --format progress \
+              --format RspecJunitFormatter \
+              --out /tmp/test-results/rspec.xml \
+              --format progress \
+              $TEST_FILES
+  rails-5-1:
+    build:
+      docker:
+        - image: circleci/ruby:2.5
+          environment:
+            BUNDLE_JOBS: 3
+            BUNDLE_RETRY: 3
+            BUNDLE_PATH: ~/.bundle
+            RAILS_ENV: test
+    steps:
+      - checkout
+      - run:
+          name: Configure Bundler
+          command: |
+            sudo gem update --system
+            echo 'export BUNDLER_VERSION=$(cat "gemfiles/rails_5_1.gemfile.lock" | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
+      - run:
+          name: Bundle Install
+          command: bundle install
+      - run:
+          name: Appraisal Install
+          command: bundle exec appraisal install
+      - run:
+          name: Run Tests
+          command: |
+            mkdir /tmp/test-results
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
+              circleci tests split --split-by=timings)"
 
-      #       bundle exec appraisal rails-6-0 rspec \
-      #         --format progress \
-      #         --format RspecJunitFormatter \
-      #         --out /tmp/test-results/rspec.xml \
-      #         --format progress \
-      #         $TEST_FILES
+            bundle exec appraisal rails-5-1 rspec \
+              --format progress \
+              --format RspecJunitFormatter \
+              --out /tmp/test-results/rspec.xml \
+              --format progress \
+              $TEST_FILES
+  rails-5-2:
+    build:
+      docker:
+        - image: circleci/ruby:2.6.5
+          environment:
+            BUNDLE_JOBS: 3
+            BUNDLE_RETRY: 3
+            BUNDLE_PATH: ~/.bundle
+            RAILS_ENV: test
+    steps:
+      - checkout
+      - run:
+          name: Configure Bundler
+          command: |
+            sudo gem update --system
+            echo 'export BUNDLER_VERSION=$(cat "gemfiles/rails_5_2.gemfile.lock" | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
+      - run:
+          name: Bundle Install
+          command: bundle install
+      - run:
+          name: Appraisal Install
+          command: bundle exec appraisal install
+      - run:
+          name: Run Tests
+          command: |
+            mkdir /tmp/test-results
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
+              circleci tests split --split-by=timings)"
 
-#   build-rails-5-2:
-#     docker:
-#       # specify the version you desire here
-#       - image: circleci/ruby:2.6.2
-#         environment:
-#           BUNDLE_JOBS: 3
-#           BUNDLE_RETRY: 3
-#           BUNDLE_PATH: vendor/bundle
-#           RAILS_ENV: test
-
-#     working_directory: ~/repo
-
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys:
-#             - v1-dependencies-{{ checksum "gemfiles/rails_5_2.gemfile.lock" }}
-#             # fallback to using the latest cache if no exact match is found
-#             - v1-dependencies-
-
-#       - run:
-#           name: Configure Bundler
-#           command: |
-#             echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
-#             source $BASH_ENV
-#             gem install bundler
-
-#       - run:
-#           name: install dependencies
-#           command: |
-#             bundle install --gemfile='./gemfiles/rails_5_2.gemfile' --jobs=4 --retry=3 --path vendor/bundle
-
-#       - save_cache:
-#           paths:
-#             - ./vendor/bundle
-#           key: v1-dependencies-{{ checksum "gemfiles/rails_5_2.gemfile.lock" }}
-
-#   test-rails-5-2:
-#     docker:
-#       # specify the version you desire here
-#       - image: circleci/ruby:2.6.2
-#         environment:
-#           BUNDLE_JOBS: 3
-#           BUNDLE_RETRY: 3
-#           BUNDLE_PATH: vendor/bundle
-#           RAILS_ENV: test
-#     steps:
-#       - restore_cache:
-#           keys:
-#             - v1-dependencies-{{ checksum "gemfiles/rails_4_2.gemfile.lock" }}
-#             # fallback to using the latest cache if no exact match is found
-#             - v1-dependencies-
-#       - run:
-#           name: run tests
-#           command: |
-#             mkdir /tmp/test-results
-#             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-#               circleci tests split --split-by=timings)"
-
-#             bundle exec appraisal rails-5-2 rspec \
-#               --format progress \
-#               --format RspecJunitFormatter \
-#               --out /tmp/test-results/rspec.xml \
-#               --format progress \
-#               $TEST_FILES
-
-#   build-rails-5-1:
-#     docker:
-#       # specify the version you desire here
-#       - image: circleci/ruby:2.6.2
-#         environment:
-#           BUNDLE_JOBS: 3
-#           BUNDLE_RETRY: 3
-#           BUNDLE_PATH: vendor/bundle
-#           RAILS_ENV: test
-
-#     working_directory: ~/repo
-
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys:
-#             - v1-dependencies-{{ checksum "gemfiles/rails_5_1.gemfile.lock" }}
-#             # fallback to using the latest cache if no exact match is found
-#             - v1-dependencies-
-
-#       - run:
-#           name: Configure Bundler
-#           command: |
-#             echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
-#             source $BASH_ENV
-#             gem install bundler
-
-#       - run:
-#           name: install dependencies
-#           command: |
-#             bundle install --gemfile='./gemfiles/rails_5_1.gemfile' --jobs=4 --retry=3 --path vendor/bundle
-
-#       - save_cache:
-#           paths:
-#             - ./vendor/bundle
-#           key: v1-dependencies-{{ checksum "gemfiles/rails_5_1.gemfile.lock" }}
-
-#   test-rails-5-1:
-#     docker:
-#       # specify the version you desire here
-#       - image: circleci/ruby:2.6.2
-#         environment:
-#           BUNDLE_JOBS: 3
-#           BUNDLE_RETRY: 3
-#           BUNDLE_PATH: vendor/bundle
-#           RAILS_ENV: test
-#     steps:
-#       - restore_cache:
-#           keys:
-#             - v1-dependencies-{{ checksum "gemfiles/rails_4_2.gemfile.lock" }}
-#             # fallback to using the latest cache if no exact match is found
-#             - v1-dependencies-
-#       - run:
-#           name: run tests
-#           command: |
-#             mkdir /tmp/test-results
-#             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-#               circleci tests split --split-by=timings)"
-
-#             bundle exec appraisal rails-5-1 rspec \
-#               --format progress \
-#               --format RspecJunitFormatter \
-#               --out /tmp/test-results/rspec.xml \
-#               --format progress \
-#               $TEST_FILES
-
-#   build-rails-5-0:
-#     docker:
-#       # specify the version you desire here
-#       - image: circleci/ruby:2.6.2
-#         environment:
-#           BUNDLE_JOBS: 3
-#           BUNDLE_RETRY: 3
-#           BUNDLE_PATH: vendor/bundle
-#           RAILS_ENV: test
-
-#     working_directory: ~/repo
-
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys:
-#             - v1-dependencies-{{ checksum "gemfiles/rails_5_0.gemfile.lock" }}
-#             # fallback to using the latest cache if no exact match is found
-#             - v1-dependencies-
-
-#       - run:
-#           name: Configure Bundler
-#           command: |
-#             echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
-#             source $BASH_ENV
-#             gem install bundler
-
-#       - run:
-#           name: install dependencies
-#           command: |
-#             bundle install --gemfile='./gemfiles/rails_5_0.gemfile' --jobs=4 --retry=3 --path vendor/bundle
-
-#       - save_cache:
-#           paths:
-#             - ./vendor/bundle
-#           key: v1-dependencies-{{ checksum "gemfiles/rails_5_0.gemfile.lock" }}
-
-#   test-rails-5-0:
-#     docker:
-#       # specify the version you desire here
-#       - image: circleci/ruby:2.6.2
-#         environment:
-#           BUNDLE_JOBS: 3
-#           BUNDLE_RETRY: 3
-#           BUNDLE_PATH: vendor/bundle
-#           RAILS_ENV: test
-#     steps:
-#       - restore_cache:
-#           keys:
-#             - v1-dependencies-{{ checksum "gemfiles/rails_4_2.gemfile.lock" }}
-#             # fallback to using the latest cache if no exact match is found
-#             - v1-dependencies-
-#       - run:
-#           name: run tests
-#           command: |
-#             mkdir /tmp/test-results
-#             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-#               circleci tests split --split-by=timings)"
-
-#             bundle exec appraisal rails-5-0 rspec \
-#               --format progress \
-#               --format RspecJunitFormatter \
-#               --out /tmp/test-results/rspec.xml \
-#               --format progress \
-#               $TEST_FILES
-
-#   build-rails-4-2:
-#     docker:
-#       # specify the version you desire here
-#       - image: circleci/ruby:2.6.2
-#         environment:
-#           BUNDLE_JOBS: 3
-#           BUNDLE_RETRY: 3
-#           BUNDLE_PATH: vendor/bundle
-#           RAILS_ENV: test
-
-#     working_directory: ~/repo
-
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys:
-#             - v1-dependencies-{{ checksum "gemfiles/rails_4_2.gemfile.lock" }}
-#             # fallback to using the latest cache if no exact match is found
-#             - v1-dependencies-
-
-#       - run:
-#           name: Configure Bundler
-#           command: |
-#             echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
-#             source $BASH_ENV
-#             gem install bundler
-
-#       - run:
-#           name: install dependencies
-#           command: |
-#             bundle install --gemfile='./gemfiles/rails_4_2.gemfile' --jobs=4 --retry=3 --path vendor/bundle
-
-#       - save_cache:
-#           paths:
-#             - ./vendor/bundle
-#           key: v1-dependencies-{{ checksum "gemfiles/rails_4_2.gemfile.lock" }}
-
-#   test_rails_4_2:
-#     docker:
-#       # specify the version you desire here
-#       - image: circleci/ruby:2.6.2
-#         environment:
-#           BUNDLE_JOBS: 3
-#           BUNDLE_RETRY: 3
-#           BUNDLE_PATH: vendor/bundle
-#           RAILS_ENV: test
-#     steps:
-#       - restore_cache:
-#           keys:
-#             - v1-dependencies-{{ checksum "gemfiles/rails_4_2.gemfile.lock" }}
-#             # fallback to using the latest cache if no exact match is found
-#             - v1-dependencies-
-#       - run:
-#           name: run tests
-#           command: |
-#             mkdir /tmp/test-results
-#             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-#               circleci tests split --split-by=timings)"
-
-#             bundle exec appraisal rails-4-2 rspec \
-#               --format progress \
-#               --format RspecJunitFormatter \
-#               --out /tmp/test-results/rspec.xml \
-#               --format progress \
-#               $TEST_FILES
+            bundle exec appraisal rails-5-2 rspec \
+              --format progress \
+              --format RspecJunitFormatter \
+              --out /tmp/test-results/rspec.xml \
+              --format progress \
+              $TEST_FILES
 workflows:
   version: 2
   build_and_test_rails_versions:
     jobs:
-      - build
-      - rails-6-0:
-          requires:
-            - build
-      # - build-rails-5-2
-      # - build-rails-5-1
-      # - build-rails-5-0
-      # - build-rails-4-2
-      # - test_rails_5_2:
-      #     requires:
-      #       - build-rails-5-2
-      # - test_rails_5_1:
-      #     requires:
-      #       - build-rails-5-1
-      # - test_rails_5_0:
-      #     requires:
-      #       - build-rails-5-0
-      # - test_rails_4_2:
-      #     requires:
-      #       - build-rails-4-2
+      - rails-4-2
+      - rails-5-0
+      - rails-5-1
+      - rails-5-2
