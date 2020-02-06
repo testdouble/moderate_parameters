@@ -50,6 +50,11 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - run:
+          name: Remove Old Bundler
+          command: |
+            sudo rm /usr/local/bin/bundle
+            sudo rm /usr/local/bin/gem
       - attach_workspace:
           at: /usr/local/bin
       - attach_workspace:
