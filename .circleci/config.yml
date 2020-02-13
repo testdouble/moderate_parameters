@@ -126,7 +126,6 @@ jobs:
           name: Bundle Install
           command: |
               bundle install
-              bundle install --gemfile='gemfiles/rails_5_2.gemfile'
       - run:
           name: Run Tests
           command: |
