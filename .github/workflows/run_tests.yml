@@ -11,7 +11,7 @@ jobs:
     - name: RubyGems Version
       run: gem -v
     - name: RubyGems Update
-      run: gem update --system
+      run: sudo gem update --system
     - name: RubyGems Version
       run: gem -v
     - name: Install Bundler
