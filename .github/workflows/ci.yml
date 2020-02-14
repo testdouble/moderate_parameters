@@ -9,28 +9,26 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    # - uses: actions/checkout@v2
-    # - name: No Docs
-    #   run: "echo 'gem: --no-document' >> ~/.gemrc"
-    # - uses: ruby/setup-ruby@v1
-    #   with:
-    #     ruby-version: 2.4
-    # - name: RubyGems Update
-    #   run: gem update --system
-    # - name: Bundle Install
-    #   run: bundle install
-    - run: echo $GITHUB_REF
-    - run: echo $GITHUB_SHA
-    - run: echo $GIT_BRANCH
-    - run: echo $GIT_COMMIT_SHA
-    # - name: Set ENV for codeclimate (push)
-    #   run: |
-    #     echo "::set-env name=GIT_BRANCH::$GITHUB_REF"
-    #     echo "::set-env name=GIT_COMMIT_SHA::$GITHUB_SHA"
-    # - name: Prepare for test
-    #   run: |
-    #     curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-    #     chmod +x ./cc-test-reporter
-    #     GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter before-build
-    # - name: RSpec
-    #   run: bundle exec rspec
+    - uses: actions/checkout@v2
+    - name: No Docs
+      run: "echo 'gem: --no-document' >> ~/.gemrc"
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.4
+    - name: RubyGems Update
+      run: gem update --system
+    - name: Bundle Install
+      run: bundle install
+    - name: Prepare for test
+      run: |
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+        ./cc-test-reporter before-build
+    - name: RSpec
+      run: |
+        bundle exec rspec --format progress \
+                          --format RspecJunitFormatter \
+                          --out /tmp/test-results/rspec.xml \
+                          --format progress
+
+        ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
