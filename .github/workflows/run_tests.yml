@@ -1,7 +1,7 @@
 name: Run Tests
 on: [push]
 jobs:
-  test:
+  rails-5-2:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -15,6 +15,57 @@ jobs:
     - name: Bundle Install
       run: bundle install
     - name: Appraisal Install
-      run: bundle exec appraisal install
+      run: bundle exec appraisal install --gemfile={{ GITHUB_WORKSPACE }}/gemfiles/rails-5-2.gemfile
     - name: Run Tests
       run: bundle exec appraisal rails-5-2 rspec
+  rails-5-1:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: No Docs
+      run: "echo 'gem: --no-document' >> ~/.gemrc"
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.5
+    - name: RubyGems Update
+      run: gem update --system
+    - name: Bundle Install
+      run: bundle install
+    - name: Appraisal Install
+      run: bundle exec appraisal install --gemfile={{ GITHUB_WORKSPACE }}/gemfiles/rails-5-1.gemfile
+    - name: Run Tests
+      run: bundle exec appraisal rails-5-1 rspec
+  rails-5-0:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: No Docs
+      run: "echo 'gem: --no-document' >> ~/.gemrc"
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.4
+    - name: RubyGems Update
+      run: gem update --system
+    - name: Bundle Install
+      run: bundle install
+    - name: Appraisal Install
+      run: bundle exec appraisal install --gemfile={{ GITHUB_WORKSPACE }}/gemfiles/rails-5-0.gemfile
+    - name: Run Tests
+      run: bundle exec appraisal rails-5-0 rspec
+  rails-4-2:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: No Docs
+      run: "echo 'gem: --no-document' >> ~/.gemrc"
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.4
+    - name: RubyGems Update
+      run: gem update --system
+    - name: Bundle Install
+      run: bundle install
+    - name: Appraisal Install
+      run: bundle exec appraisal install --gemfile={{ GITHUB_WORKSPACE }}/gemfiles/rails-4-2.gemfile
+    - name: Run Tests
+      run: bundle exec appraisal rails-4-2 rspec
