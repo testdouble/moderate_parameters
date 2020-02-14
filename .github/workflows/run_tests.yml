@@ -1,4 +1,4 @@
-name: Run Tests
+name: CI
 on: [push]
 jobs:
   rails-5-2:
@@ -12,12 +12,12 @@ jobs:
         ruby-version: 2.6
     - name: RubyGems Update
       run: gem update --system
-    - name: Bundle Install
-      run: bundle install
+    - name: Install Appraisal
+      run: gem install appraisal
     - name: Appraisal Install
-      run: bundle exec appraisal rails-5-2 bundle install
+      run: appraisal rails-5-2 bundle install
     - name: Run Tests
-      run: bundle exec appraisal rails-5-2 rspec
+      run: appraisal rails-5-2 rspec
   rails-5-1:
     runs-on: ubuntu-latest
     steps:
@@ -29,12 +29,14 @@ jobs:
         ruby-version: 2.5
     - name: RubyGems Update
       run: gem update --system
-    - name: Bundle Install
-      run: bundle install
+    - name: Update Bundler
+      run: gem update bundler
+    - name: Install Appraisal
+      run: gem install appraisal
     - name: Appraisal Install
-      run: bundle exec appraisal rails-5-1 bundle install
+      run: appraisal rails-5-1 bundle install
     - name: Run Tests
-      run: bundle exec appraisal rails-5-1 rspec
+      run: appraisal rails-5-1 rspec
   rails-5-0:
     runs-on: ubuntu-latest
     steps:
@@ -46,12 +48,12 @@ jobs:
         ruby-version: 2.4
     - name: RubyGems Update
       run: gem update --system
-    - name: Bundle Install
-      run: bundle install
+    - name: Install Appraisal
+      run: gem install appraisal
     - name: Appraisal Install
-      run: bundle exec appraisal rails-5-0 bundle install
+      run: appraisal rails-5-0 bundle install
     - name: Run Tests
-      run: bundle exec appraisal rails-5-0 rspec
+      run: appraisal rails-5-0 rspec
   rails-4-2:
     runs-on: ubuntu-latest
     steps:
@@ -63,9 +65,9 @@ jobs:
         ruby-version: 2.4
     - name: RubyGems Update
       run: gem update --system
-    - name: Bundle Install
-      run: bundle install
+    - name: Install Appraisal
+      run: gem install appraisal
     - name: Appraisal Install
-      run: bundle exec appraisal rails-4-2 bundle install
+      run: appraisal rails-4-2 bundle install
     - name: Run Tests
-      run: bundle exec appraisal rails-4-2 rspec
+      run: appraisal rails-4-2 rspec
