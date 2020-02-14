@@ -107,8 +107,5 @@ DEPENDENCIES
   rspec (~> 3.0)
   rspec_junit_formatter (= 0.4.1)
 
-RUBY VERSION
-   ruby 2.4.9p362
-
 BUNDLED WITH
    2.1.4
