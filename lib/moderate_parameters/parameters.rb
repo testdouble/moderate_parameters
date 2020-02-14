@@ -47,6 +47,12 @@ module ModerateParameters
       end
     end
 
+    def array_of_permitted_scalars?(value)
+      if value.is_a?(Array) && value.all? { |element| permitted_scalar?(element) }
+        yield value
+      end
+    end
+
     def non_scalar?(value)
       value.is_a?(Array) || value.is_a?(Parameters)
     end
