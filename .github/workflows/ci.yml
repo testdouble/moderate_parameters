@@ -2,8 +2,8 @@ name: CI
 on: [push]
 
 env:
-  GIT_BRANCH: ${{ GITHUB_REF }}
-  GIT_COMMIT_SHA: ${{ GITHUB_SHA }}
+  GIT_BRANCH: ${{ github.ref }}
+  GIT_COMMIT_SHA: ${{ github.sha }}
 
 jobs:
   test:
