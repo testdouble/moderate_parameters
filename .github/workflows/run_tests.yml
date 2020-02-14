@@ -12,12 +12,12 @@ jobs:
         ruby-version: 2.6
     - name: RubyGems Update
       run: gem update --system
-    - name: Install Appraisal
-      run: gem install appraisal
+    - name: Bundle Install
+      run: bundle install
     - name: Appraisal Install
-      run: appraisal rails-5-2 bundle install
+      run: bundle exec appraisal rails-5-2 bundle install
     - name: Run Tests
-      run: appraisal rails-5-2 rspec
+      run: bundle exec appraisal rails-5-2 rspec
   rails-5-1:
     runs-on: ubuntu-latest
     steps:
@@ -31,12 +31,10 @@ jobs:
       run: gem update --system
     - name: Update Bundler
       run: gem update bundler
-    - name: Install Appraisal
-      run: gem install appraisal
     - name: Appraisal Install
-      run: appraisal rails-5-1 bundle install
+      run: bundle exec appraisal rails-5-1 bundle install
     - name: Run Tests
-      run: appraisal rails-5-1 rspec
+      run: bundle exec appraisal rails-5-1 rspec
   rails-5-0:
     runs-on: ubuntu-latest
     steps:
@@ -48,12 +46,12 @@ jobs:
         ruby-version: 2.4
     - name: RubyGems Update
       run: gem update --system
-    - name: Install Appraisal
-      run: gem install appraisal
+    - name: Bundle Install
+      run: bundle install
     - name: Appraisal Install
-      run: appraisal rails-5-0 bundle install
+      run: bundle exec appraisal rails-5-0 bundle install
     - name: Run Tests
-      run: appraisal rails-5-0 rspec
+      run: bundle exec appraisal rails-5-0 rspec
   rails-4-2:
     runs-on: ubuntu-latest
     steps:
@@ -65,9 +63,9 @@ jobs:
         ruby-version: 2.4
     - name: RubyGems Update
       run: gem update --system
-    - name: Install Appraisal
-      run: gem install appraisal
+    - name: Bundle Install
+      run: bundle install
     - name: Appraisal Install
-      run: appraisal rails-4-2 bundle install
+      run: bundle exec appraisal rails-4-2 bundle install
     - name: Run Tests
-      run: appraisal rails-4-2 rspec
+      run: bundle exec appraisal rails-4-2 rspec
