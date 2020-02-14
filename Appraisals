@@ -20,8 +20,8 @@ appraise 'rails-5-1' do
 end
 
 appraise 'rails-5-2' do
-  gem 'actionpack', '5.2.3'
-  gem 'activemodel', '5.2.3'
-  gem 'activesupport', '5.2.3'
-  gem 'railties', '5.2.3'
+  gem 'actionpack', '5.2.4.1'
+  gem 'activemodel', '5.2.4.1'
+  gem 'activesupport', '5.2.4.1'
+  gem 'railties', '5.2.4.1'
 end
