@@ -4,6 +4,7 @@ on: [push]
 env:
   GIT_BRANCH: ${{ github.ref }}
   GIT_COMMIT_SHA: ${{ github.sha }}
+  CC_TEST_REPORTER_ID: ${{ secrets.CC_REPORTER_ID }}
 
 jobs:
   test:
