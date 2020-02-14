@@ -5,13 +5,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: No Docs
+      run: "echo 'gem: --no-document' >> ~/.gemrc"
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.6
     - name: RubyGems Version
       run: gem -v
     - name: RubyGems Update
-      run: sudo gem update --system
+      run: gem update --system
     - name: RubyGems Version
       run: gem -v
     - name: Install Bundler
