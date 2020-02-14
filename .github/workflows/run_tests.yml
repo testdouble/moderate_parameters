@@ -8,6 +8,8 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.6
+    - name: RubyGems Version
+      run: gem -v
     - name: Install Bundler
       run: bundle install
     - name: Run Tests
