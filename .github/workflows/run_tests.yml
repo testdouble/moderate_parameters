@@ -8,4 +8,7 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.6
-    - run: ruby -v
+    - name: Install Bundler
+      run: bundle install
+    - name: Run Tests
+      run: bundle exec rspec
