@@ -10,6 +10,8 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.4
+    - name: RubyGems Update
+      run: gem update --system
     - name: Bundle Install
       run: bundle install
     - name: RSpec
