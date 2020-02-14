@@ -95,12 +95,12 @@ DEPENDENCIES
   actionpack (= 5.0.7.2)
   activemodel (= 5.0.7.2)
   activesupport (= 5.0.7.2)
-  appraisal (= 2.2.0)
+  appraisal (~> 2.2.0)
   bundler (~> 2.0)
   moderate_parameters!
-  pry (~> 0.12.2)
+  pry
   railties (= 5.0.7.2)
-  rake (~> 10.0)
+  rake
   rspec (~> 3.0)
   rspec_junit_formatter (= 0.4.1)
 

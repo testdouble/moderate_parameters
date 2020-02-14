@@ -42,9 +42,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'railties', '>= 4.2', '< 6.0'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
-  spec.add_development_dependency 'pry', '~> 0.12.2'
-  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rspec_junit_formatter', '0.4.1'
-  spec.add_development_dependency 'appraisal', '2.2.0'
+  spec.add_development_dependency 'appraisal', '~> 2.2.0'
 end
