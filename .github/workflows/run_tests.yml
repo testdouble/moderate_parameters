@@ -1,4 +1,4 @@
-name: CI
+name: Appraisals
 on: [push]
 jobs:
   rails-5-2:
