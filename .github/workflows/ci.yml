@@ -32,4 +32,5 @@ jobs:
                           --out /tmp/test-results/rspec.xml \
                           --format progress
 
-        ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
+        ./cc-test-reporter format-coverage -t simplecov $GITHUB_WORKSPACE/coverage/.resultset.json
+        ./cc-test-reporter upload-coverage
