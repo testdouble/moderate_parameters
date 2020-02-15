@@ -25,7 +25,7 @@ module ModerateParameters
     private
 
     def write_to_log(options)
-      ActiveSupport::Notifications.instrument('moderate_parameters') do |payload|
+      ActiveSupport::Notifications.instrument('moderate_parameters.default') do |payload|
         payload.merge!(options)
       end
     end

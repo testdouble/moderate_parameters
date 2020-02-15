@@ -12,7 +12,7 @@ RSpec.describe ModerateParameters do
     describe '#moderate' do
       # params.permit(:name, {:emails => []}, :friends => [ :name, { :family => [ :name ], :hobbies => [] }])
       it 'logs to a file' do
-        payload = notification_payload_for('moderate_parameters') { subject }
+        payload = notification_payload_for('moderate_parameters.default') { subject }
         expect(payload[:controller]).to eql('controller')
         expect(payload[:action]).to eql('action')
         expect(payload[:message]).to eql('Top Level is missing: age')
@@ -21,7 +21,7 @@ RSpec.describe ModerateParameters do
       context 'key present but missing array value' do
         let(:subject) { params.require(:person).moderate('controller', 'action', :name, :age, :sub_array, { sub_hash: {} }) }
         it 'logs to a file' do
-          payload = notification_payload_for('moderate_parameters') { subject }
+          payload = notification_payload_for('moderate_parameters.default') { subject }
           expect(payload[:controller]).to eql('controller')
           expect(payload[:action]).to eql('action')
           expect(payload[:message]).to eql('Top Level is missing: [] value for sub_array')
@@ -31,7 +31,7 @@ RSpec.describe ModerateParameters do
       context 'key present but missing hash value' do
         let(:subject) { params.require(:person).moderate('controller', 'action', :name, :age, { sub_array: [] }, :sub_hash) }
         it 'logs to a file' do
-          payload = notification_payload_for('moderate_parameters') { subject }
+          payload = notification_payload_for('moderate_parameters.default') { subject }
           expect(payload[:controller]).to eql('controller')
           expect(payload[:action]).to eql('action')
           expect(payload[:message]).to eql('Top Level is missing: {} value for sub_hash')
@@ -47,20 +47,6 @@ RSpec.describe ModerateParameters do
       end
     end
 
-    describe '#[]' do
-      let(:relative_line) { __LINE__ + 2 }
-      def a(test_params)
-        test_params[:person]
-      end
-
-      let(:subject) { a(params) }
-      it 'logs to a file' do
-        payload = notification_payload_for('moderate_parameters') { subject }
-        expect(payload[:message]).to start_with('person is being read on:')
-        expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
-      end
-    end
-
     describe '#[]=' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
@@ -70,7 +56,7 @@ RSpec.describe ModerateParameters do
       let(:subject) { a(params) }
 
       it 'logs to a file' do
-        payload = notification_payload_for('moderate_parameters') { subject }
+        payload = notification_payload_for('moderate_parameters.breadcrumbs.[]=') { subject }
         expect(payload[:message]).to start_with('person is being overwritten on:')
         expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
       end
@@ -85,8 +71,23 @@ RSpec.describe ModerateParameters do
       let(:subject) { a(params) }
 
       it 'logs to a file' do
-        payload = notification_payload_for('moderate_parameters') { subject }
+        payload = notification_payload_for('moderate_parameters.breadcrumbs.extract!') { subject }
         expect(payload[:message]).to start_with('extract! is being called with [:name] on:')
+        expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
+      end
+    end
+
+    describe '#slice!' do
+      let(:relative_line) { __LINE__ + 2 }
+      def a(test_params)
+        test_params.require(:person).slice!(:name)
+      end
+
+      let(:subject) { a(params) }
+
+      it 'logs to a file' do
+        payload = notification_payload_for('moderate_parameters.breadcrumbs.slice!') { subject }
+        expect(payload[:message]).to start_with('slice! is being called with [:name] on:')
         expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
       end
     end

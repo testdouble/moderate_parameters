@@ -13,6 +13,9 @@ module ModerateParameters
   mattr_accessor :logger
   @@logger = nil
 
+  mattr_accessor :breadcrumb_logger
+  @@breadcrumb_logger = nil
+
   def self.configure
     yield self
   end
