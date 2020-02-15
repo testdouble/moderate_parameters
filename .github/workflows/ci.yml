@@ -33,5 +33,5 @@ jobs:
                           --format progress
         
         ls -a $GITHUB_WORKSPACE/coverage/
-        ./cc-test-reporter format-coverage -t simplecov -o "coverage/.resultset.json" -p $GITHUB_WORKSPACE
+        ./cc-test-reporter format-coverage --debug -t simplecov -o "coverage/.resultset.json" -p $GITHUB_WORKSPACE
         ./cc-test-reporter upload-coverage
