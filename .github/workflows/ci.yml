@@ -32,6 +32,6 @@ jobs:
                           --out /tmp/test-results/rspec.xml \
                           --format progress
         
-        ls $GITHUB_WORKSPACE/coverage/
-        ./cc-test-reporter format-coverage -t simplecov -o $GITHUB_WORKSPACE/coverage/.resultset.json
+        ls -a $GITHUB_WORKSPACE/coverage/
+        ./cc-test-reporter format-coverage -t simplecov -o "coverage/.resultset.json" -p $GITHUB_WORKSPACE
         ./cc-test-reporter upload-coverage
