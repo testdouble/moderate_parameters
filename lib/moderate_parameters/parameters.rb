@@ -49,6 +49,8 @@ module ModerateParameters
 
     def array_of_permitted_scalars?(value)
       if value.is_a?(Array) && value.all? { |element| permitted_scalar?(element) }
+        return true unless block_given?
+        
         yield value
       end
     end
