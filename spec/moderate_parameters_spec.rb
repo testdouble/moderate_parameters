@@ -4,7 +4,7 @@ RSpec.describe ModerateParameters do
   let(:params) { ActionController::Parameters.new(person: { name: 'Francesco', age: '25', sub_array: [:foo, :bar], sub_hash: { baz: :bang } }) }
 
   it 'has a version number' do
-    expect(ModerateParameters::VERSION).not_to be nil
+    expect(ModerateParameters::VERSION).to be_an_instance_of(String)
   end
 
   describe '::Parameters' do
