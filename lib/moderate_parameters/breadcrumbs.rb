@@ -37,7 +37,7 @@ module ModerateParameters
       super
     end
 
-    def delete(*keys)
+    def delete(*keys, &block)
       if ModerateParameters.breadcrumbs_enabled && permitted?
         internal_method_logging('delete', keys, caller_locations)
       end
@@ -51,9 +51,25 @@ module ModerateParameters
       super
     end
 
+    # Alias for #reject!
+    def delete_if(&block)
+      if ModerateParameters.breadcrumbs_enabled && permitted?
+        internal_method_logging('delete_if', 'a block', caller_locations)
+      end
+      super
+    end
+
     def select!(&block)
       if ModerateParameters.breadcrumbs_enabled && permitted?
         internal_method_logging('select!', 'a block', caller_locations)
+      end
+      super
+    end
+
+    # Alias for #select!
+    def keep_if(&block)
+      if ModerateParameters.breadcrumbs_enabled && permitted?
+        internal_method_logging('keep_if', 'a block', caller_locations)
       end
       super
     end

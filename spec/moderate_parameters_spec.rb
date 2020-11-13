@@ -157,6 +157,18 @@ RSpec.describe ModerateParameters do
       end
     end
 
+    describe '#delete_if' do
+      let(:relative_line) { __LINE__ + 2 }
+      def a(test_params)
+        test_params.require(:person).permit(*valid_permission_keys).delete_if { |k, _v| k == :name }
+      end
+
+      it 'logs to a file' do
+        expect(payload[:message]).to start_with('delete_if is being called with a block on:')
+        expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
+      end
+    end
+
     describe '#select!' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
@@ -165,6 +177,18 @@ RSpec.describe ModerateParameters do
 
       it 'logs to a file' do
         expect(payload[:message]).to start_with('select! is being called with a block on:')
+        expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
+      end
+    end
+
+    describe '#keep_if' do
+      let(:relative_line) { __LINE__ + 2 }
+      def a(test_params)
+        test_params.require(:person).permit(*valid_permission_keys).keep_if { |k, _v| k == :name }
+      end
+
+      it 'logs to a file' do
+        expect(payload[:message]).to start_with('keep_if is being called with a block on:')
         expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
       end
     end
