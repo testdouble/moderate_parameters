@@ -2,18 +2,24 @@
 
 module ModerateParameters
   module Breadcrumbs
-    def [](key)
-      internal_param_logging(key, 'read', caller_locations) if ModerateParameters.breadcrumbs_enabled
-      super
-    end
-
     def []=(key, value)
-      internal_param_logging(key, 'overwritten', caller_locations) if ModerateParameters.breadcrumbs_enabled
+      if ModerateParameters.breadcrumbs_enabled && permitted?
+        internal_param_logging(key, 'overwritten', caller_locations)
+      end
       super
     end
 
     def extract!(*keys)
-      internal_method_logging('extract!', keys, caller_locations) if ModerateParameters.breadcrumbs_enabled
+      if ModerateParameters.breadcrumbs_enabled && permitted?
+        internal_method_logging('extract!', keys, caller_locations)
+      end
+      super
+    end
+
+    def delete(*keys)
+      if ModerateParameters.breadcrumbs_enabled && permitted?
+        internal_method_logging('delete', keys, caller_locations)
+      end
       super
     end
 
