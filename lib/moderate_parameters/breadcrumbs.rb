@@ -16,6 +16,13 @@ module ModerateParameters
       super
     end
 
+    def reverse_merge!(other_hash)
+      if ModerateParameters.breadcrumbs_enabled && permitted?
+        internal_method_logging('reverse_merge!', other_hash, caller_locations)
+      end
+      super
+    end
+
     def extract!(*keys)
       if ModerateParameters.breadcrumbs_enabled && permitted?
         internal_method_logging('extract!', keys, caller_locations)
