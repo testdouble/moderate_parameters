@@ -23,6 +23,7 @@ RSpec.describe ModerateParameters do
   describe '::Parameters' do
     let(:permission_keys) { valid_permission_keys }
     let(:subject) { params.require(:person).moderate('controller', 'action', *permission_keys) }
+
     describe '#moderate' do
       context 'with permitted params properly specified' do
         it 'does not log to a file' do
@@ -102,6 +103,18 @@ RSpec.describe ModerateParameters do
 
       it 'logs to a file' do
         expect(payload[:message]).to start_with('delete is being called with [:name] on:')
+        expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
+      end
+    end
+
+    describe '#reject!' do
+      let(:relative_line) { __LINE__ + 2 }
+      def a(test_params)
+        test_params.require(:person).permit(*valid_permission_keys).reject! { |k, _v| k == :name }
+      end
+
+      it 'logs to a file' do
+        expect(payload[:message]).to start_with('reject! is being called with a block on:')
         expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
       end
     end

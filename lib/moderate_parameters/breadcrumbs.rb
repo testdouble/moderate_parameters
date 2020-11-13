@@ -23,6 +23,13 @@ module ModerateParameters
       super
     end
 
+    def reject!(&block)
+      if ModerateParameters.breadcrumbs_enabled && permitted?
+        internal_method_logging('reject!', 'a block', caller_locations)
+      end
+      super
+    end
+
     private
 
     def internal_param_logging(key, action, stack_array)
