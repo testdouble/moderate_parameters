@@ -16,6 +16,13 @@ module ModerateParameters
       super
     end
 
+    def slice!(*keys)
+      if ModerateParameters.breadcrumbs_enabled && permitted?
+        internal_method_logging('slice!', keys, caller_locations)
+      end
+      super
+    end
+
     def delete(*keys)
       if ModerateParameters.breadcrumbs_enabled && permitted?
         internal_method_logging('delete', keys, caller_locations)
