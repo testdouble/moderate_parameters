@@ -83,6 +83,19 @@ RSpec.describe ModerateParameters do
       end
     end
 
+    describe '#merge!' do
+      let(:other_hash) { { name: 'Sophie'} }
+      let(:relative_line) { __LINE__ + 2 }
+      def a(test_params)
+        test_params.require(:person).permit(*valid_permission_keys).merge!(other_hash)
+      end
+
+      it 'logs to a file' do
+        expect(payload[:message]).to start_with("merge! is being called with #{other_hash} on:")
+        expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
+      end
+    end
+
     describe '#extract!' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
