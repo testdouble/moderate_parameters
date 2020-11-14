@@ -25,8 +25,11 @@ RSpec.describe ModerateParameters do
       let(:permission_keys) { valid_permission_keys }
       let(:subject) { params.require(:person).moderate('controller', 'action', *permission_keys) }
       it 'sets the moderate_params_object_id instance variable on the original params object' do
-        subject
+        params.require(:person).moderate('controller', 'action', *permission_keys)
         expect(params[:person].instance_variable_get(:@moderate_params_object_id)).to be_a Integer
+        expect(payload[:controller]).to eql('controller')
+        expect(payload[:action]).to eql('action')
+        expect(payload[:message]).to start_with('.moderate has already been called on params:')
       end
 
       context 'with permitted params properly specified' do
@@ -93,7 +96,7 @@ RSpec.describe ModerateParameters do
   end
 
   describe '::Breadcrumbs' do
-    let(:subject) { a(params) }
+    let(:subject) { a(params[:person]) }
 
     before(:each) do
       ModerateParameters.configure do |c|
@@ -105,7 +108,7 @@ RSpec.describe ModerateParameters do
     describe '#[]=' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params[:person][:age] = nil
+        test_params[:age] = nil
       end
 
       context 'with the key already being set' do
@@ -139,7 +142,7 @@ RSpec.describe ModerateParameters do
       let(:other_hash) { { name: 'Sophie'} }
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params[:person].merge!(other_hash)
+        test_params.merge!(other_hash)
       end
 
       it 'logs to a file' do
@@ -152,7 +155,7 @@ RSpec.describe ModerateParameters do
       let(:other_hash) { { name: 'Alyssa'} }
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params[:person].reverse_merge!(other_hash)
+        test_params.reverse_merge!(other_hash)
       end
 
       it 'logs to a file' do
@@ -164,7 +167,7 @@ RSpec.describe ModerateParameters do
     describe '#extract!' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params[:person].extract!(:name)
+        test_params.extract!(:name)
       end
 
       it 'logs to a file' do
@@ -176,7 +179,7 @@ RSpec.describe ModerateParameters do
     describe '#slice!' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params[:person].slice!(:name)
+        test_params.slice!(:name)
       end
 
       it 'logs to a file' do
@@ -188,7 +191,7 @@ RSpec.describe ModerateParameters do
     describe '#delete' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params[:person].delete(:name)
+        test_params.delete(:name)
       end
 
       it 'logs to a file' do
@@ -200,7 +203,7 @@ RSpec.describe ModerateParameters do
     describe '#reject!' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params[:person].reject! { |k, _v| k == :name }
+        test_params.reject! { |k, _v| k == :name }
       end
 
       it 'logs to a file' do
@@ -212,7 +215,7 @@ RSpec.describe ModerateParameters do
     describe '#delete_if' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params[:person].delete_if { |k, _v| k == :name }
+        test_params.delete_if { |k, _v| k == :name }
       end
 
       it 'logs to a file' do
@@ -224,7 +227,7 @@ RSpec.describe ModerateParameters do
     describe '#select!' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params[:person].select! { |k, _v| k == :name }
+        test_params.select! { |k, _v| k == :name }
       end
 
       it 'logs to a file' do
@@ -236,7 +239,7 @@ RSpec.describe ModerateParameters do
     describe '#keep_if' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params[:person].keep_if { |k, _v| k == :name }
+        test_params.keep_if { |k, _v| k == :name }
       end
 
       it 'logs to a file' do
