@@ -21,10 +21,9 @@ RSpec.describe ModerateParameters do
   end
 
   describe '::Parameters' do
-    let(:permission_keys) { valid_permission_keys }
-    let(:subject) { params.require(:person).moderate('controller', 'action', *permission_keys) }
-
     describe '#moderate' do
+      let(:permission_keys) { valid_permission_keys }
+      let(:subject) { params.require(:person).moderate('controller', 'action', *permission_keys) }
       it 'sets the moderate_params_object_id instance variable on the original params object' do
         subject
         expect(params[:person].instance_variable_get(:@moderate_params_object_id)).to be_a Integer
@@ -62,6 +61,32 @@ RSpec.describe ModerateParameters do
           expect(payload[:controller]).to eql('controller')
           expect(payload[:action]).to eql('action')
           expect(payload[:message]).to eql('Top Level is missing: {} value for sub_hash')
+        end
+      end
+    end
+
+    describe '#require' do
+      let(:subject) { params.require(:person) }
+
+      it 'sets an instance variable on the child object' do
+        expect(subject.instance_variable_get(:@moderate_params_parent_key)).to eql(:person)
+      end
+
+      context 'when the require is passed an array' do
+        let(:params) { ActionController::Parameters.new({ person: { foo: :bar }, other: { baz: :bang } }) }
+        let(:subject) { params.require([:person, :other]) }
+
+        it 'sets an instance variable on each child object' do
+          expect(subject.map { |o| o.instance_variable_get(:@moderate_params_parent_key) }).to eql([:person, :other])
+        end
+      end
+
+      context 'when the require is called on params with a blank value' do
+        let(:params) { ActionController::Parameters.new(person: nil) }
+        let(:subject) { params.require(:person) }
+
+        it 'sets an instance variable on each child object' do
+          expect { subject }.to raise_error(ActionController::ParameterMissing, "param is missing or the value is empty: person")
         end
       end
     end

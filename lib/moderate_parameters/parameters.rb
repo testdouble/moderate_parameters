@@ -26,6 +26,12 @@ module ModerateParameters
       duplicate_params.permit!
     end
 
+    def require(key)
+      return super if key.is_a?(Array) || self[key].blank?
+      self[key].instance_variable_set(:@moderate_params_parent_key, key)
+      super
+    end
+
     private
 
     def write_to_log(options)
