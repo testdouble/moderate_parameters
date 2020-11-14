@@ -25,6 +25,11 @@ RSpec.describe ModerateParameters do
     let(:subject) { params.require(:person).moderate('controller', 'action', *permission_keys) }
 
     describe '#moderate' do
+      it 'sets the moderate_params_object_id instance variable on the original params object' do
+        subject
+        expect(params[:person].instance_variable_get(:@moderate_params_object_id)).to be_a Integer
+      end
+
       context 'with permitted params properly specified' do
         it 'does not log to a file' do
           expect(payload).to be nil
@@ -69,17 +74,39 @@ RSpec.describe ModerateParameters do
       ModerateParameters.configure do |c|
         c.breadcrumbs_enabled = true
       end
+      params.require(:person).moderate('controller', 'action', *valid_permission_keys)
     end
 
     describe '#[]=' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params.require(:person).permit(*valid_permission_keys)[:age] = nil
+        test_params[:person][:age] = nil
       end
 
-      it 'logs to a file' do
-        expect(payload[:message]).to start_with('age is being overwritten on:')
-        expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
+      context 'with the key already being set' do
+        it 'logs to a file' do
+          expect(payload[:message]).to start_with('age is being overwritten on:')
+          expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
+        end
+      end
+
+      context 'without the key already being set' do
+        let(:params) do
+          ActionController::Parameters.new(
+            {
+              person: {
+                name: 'Francesco',
+                sub_array: %i[foo bar],
+                sub_hash: { baz: :bang }
+              }
+            }
+          )
+        end
+
+        it 'logs to a file' do
+          expect(payload[:message]).to start_with('age is being added on:')
+          expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
+        end
       end
     end
 
@@ -87,11 +114,11 @@ RSpec.describe ModerateParameters do
       let(:other_hash) { { name: 'Sophie'} }
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params.require(:person).permit(*valid_permission_keys).merge!(other_hash)
+        test_params[:person].merge!(other_hash)
       end
 
       it 'logs to a file' do
-        expect(payload[:message]).to start_with("merge! is being called with #{other_hash} on:")
+        expect(payload[:message]).to start_with("merge! is being called with #{other_hash.keys} on:")
         expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
       end
     end
@@ -100,11 +127,11 @@ RSpec.describe ModerateParameters do
       let(:other_hash) { { name: 'Alyssa'} }
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params.require(:person).permit(*valid_permission_keys).reverse_merge!(other_hash)
+        test_params[:person].reverse_merge!(other_hash)
       end
 
       it 'logs to a file' do
-        expect(payload[:message]).to start_with("reverse_merge! is being called with #{other_hash} on:")
+        expect(payload[:message]).to start_with("reverse_merge! is being called with #{other_hash.keys} on:")
         expect(payload[:caller_locations][0].to_s).to end_with("spec/moderate_parameters_spec.rb:#{relative_line}:in \`a'")
       end
     end
@@ -112,7 +139,7 @@ RSpec.describe ModerateParameters do
     describe '#extract!' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params.require(:person).permit(*valid_permission_keys).extract!(:name)
+        test_params[:person].extract!(:name)
       end
 
       it 'logs to a file' do
@@ -124,7 +151,7 @@ RSpec.describe ModerateParameters do
     describe '#slice!' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params.require(:person).permit(*valid_permission_keys).slice!(:name)
+        test_params[:person].slice!(:name)
       end
 
       it 'logs to a file' do
@@ -136,7 +163,7 @@ RSpec.describe ModerateParameters do
     describe '#delete' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params.require(:person).permit(*valid_permission_keys).delete(:name)
+        test_params[:person].delete(:name)
       end
 
       it 'logs to a file' do
@@ -148,7 +175,7 @@ RSpec.describe ModerateParameters do
     describe '#reject!' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params.require(:person).permit(*valid_permission_keys).reject! { |k, _v| k == :name }
+        test_params[:person].reject! { |k, _v| k == :name }
       end
 
       it 'logs to a file' do
@@ -160,7 +187,7 @@ RSpec.describe ModerateParameters do
     describe '#delete_if' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params.require(:person).permit(*valid_permission_keys).delete_if { |k, _v| k == :name }
+        test_params[:person].delete_if { |k, _v| k == :name }
       end
 
       it 'logs to a file' do
@@ -172,7 +199,7 @@ RSpec.describe ModerateParameters do
     describe '#select!' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params.require(:person).permit(*valid_permission_keys).select! { |k, _v| k == :name }
+        test_params[:person].select! { |k, _v| k == :name }
       end
 
       it 'logs to a file' do
@@ -184,7 +211,7 @@ RSpec.describe ModerateParameters do
     describe '#keep_if' do
       let(:relative_line) { __LINE__ + 2 }
       def a(test_params)
-        test_params.require(:person).permit(*valid_permission_keys).keep_if { |k, _v| k == :name }
+        test_params[:person].keep_if { |k, _v| k == :name }
       end
 
       it 'logs to a file' do
