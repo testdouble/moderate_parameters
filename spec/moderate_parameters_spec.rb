@@ -29,7 +29,7 @@ RSpec.describe ModerateParameters do
         expect(params[:person].instance_variable_get(:@moderate_params_object_id)).to be_a Integer
         expect(payload[:controller]).to eql('controller')
         expect(payload[:action]).to eql('action')
-        expect(payload[:message]).to start_with('.moderate has already been called on params:')
+        expect(payload[:message]).to start_with('.moderate has already been called on params.require(:person):')
       end
 
       context 'with permitted params properly specified' do

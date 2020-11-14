@@ -3,7 +3,12 @@
 module ModerateParameters
   module Parameters
     def moderate(controller_name, action, *filters)
-      log_duplicate_moderate_warning(caller_locations, controller_name, action) if instance_variable_get(:@moderate_params_object_id)
+      log_duplicate_moderate_warning(
+        caller_locations,
+        instance_variable_get(:@moderate_params_parent_key),
+        controller_name,
+        action
+      ) if instance_variable_get(:@moderate_params_object_id)
 
       params = self.class.new
 
@@ -48,8 +53,8 @@ module ModerateParameters
       end
     end
 
-    def log_duplicate_moderate_warning(stack_array, controller_name, action)
-      write_to_log(message: ".moderate has already been called on params: #{stack_array.join("\n")}",
+    def log_duplicate_moderate_warning(stack_array, parent_key, controller_name, action)
+      write_to_log(message: ".moderate has already been called on params.require(:#{parent_key}): #{stack_array.join("\n")}",
                    action: action,
                    controller: controller_name)
     end
