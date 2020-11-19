@@ -57,11 +57,13 @@ module ModerateParameters
     private
 
     def needs_logged?
-      instance_variable_get(:@moderate_params_object_id) && !permitted?
+      ModerateParameters.breadcrumbs_enabled &&
+      instance_variable_get(:@moderate_params_object_id) &&
+      !permitted?
     end
 
     def internal_param_logging(key, action, stack_array)
-      return unless ModerateParameters.breadcrumbs_enabled && needs_logged?
+      return unless needs_logged?
 
       ActiveSupport::Notifications.instrument('moderate_parameters') do |payload|
         payload[:caller_locations] = stack_array
@@ -70,7 +72,7 @@ module ModerateParameters
     end
 
     def internal_method_logging(method, args, stack_array)
-      return unless ModerateParameters.breadcrumbs_enabled && needs_logged?
+      return unless needs_logged?
 
       ActiveSupport::Notifications.instrument('moderate_parameters') do |payload|
         payload[:caller_locations] = stack_array
@@ -79,7 +81,7 @@ module ModerateParameters
     end
 
     def internal_block_logging(method, stack_array)
-      return unless ModerateParameters.breadcrumbs_enabled && needs_logged?
+      return unless needs_logged?
 
       ActiveSupport::Notifications.instrument('moderate_parameters') do |payload|
         payload[:caller_locations] = stack_array
