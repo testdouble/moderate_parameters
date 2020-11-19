@@ -2,13 +2,16 @@
 
 module ModerateParameters
   module Parameters
+    MP_OBJECT_ID = :@moderate_params_object_id
+    MP_PARENT_KEY = :@moderate_params_parent_key
+
     def moderate(controller_name, action, *filters)
       log_duplicate_moderate_warning(
         caller_locations,
-        instance_variable_get(:@moderate_params_parent_key),
+        instance_variable_get(MP_PARENT_KEY),
         controller_name,
         action
-      ) if instance_variable_get(:@moderate_params_object_id)
+      ) if instance_variable_get(MP_OBJECT_ID)
 
       params = self.class.new
 
@@ -27,13 +30,13 @@ module ModerateParameters
 
       incoming_params_logging(params, controller_name, action)
       duplicate_params = dup
-      instance_variable_set(:@moderate_params_object_id, duplicate_params.object_id)
+      instance_variable_set(MP_OBJECT_ID, duplicate_params.object_id)
       duplicate_params.permit!
     end
 
     def require(key)
       return super if key.is_a?(Array) || self[key].blank?
-      self[key].instance_variable_set(:@moderate_params_parent_key, key)
+      self[key].instance_variable_set(MP_PARENT_KEY, key)
       super
     end
 
