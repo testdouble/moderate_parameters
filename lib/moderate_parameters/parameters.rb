@@ -2,7 +2,17 @@
 
 module ModerateParameters
   module Parameters
+    MP_OBJECT_ID = :@moderate_params_object_id
+    MP_PARENT_KEY = :@moderate_params_parent_key
+
     def moderate(controller_name, action, *filters)
+      log_duplicate_moderate_warning(
+        caller_locations,
+        instance_variable_get(MP_PARENT_KEY),
+        controller_name,
+        action
+      ) if instance_variable_get(MP_OBJECT_ID)
+
       params = self.class.new
 
       filters.each do |filter|
@@ -19,7 +29,15 @@ module ModerateParameters
       end
 
       incoming_params_logging(params, controller_name, action)
-      dup.permit!
+      duplicate_params = dup
+      instance_variable_set(MP_OBJECT_ID, duplicate_params.object_id)
+      duplicate_params.permit!
+    end
+
+    def require(key)
+      return super if key.is_a?(Array) || self[key].blank?
+      self[key].instance_variable_set(MP_PARENT_KEY, key)
+      super
     end
 
     private
@@ -38,6 +56,12 @@ module ModerateParameters
       end
     end
 
+    def log_duplicate_moderate_warning(stack_array, parent_key, controller_name, action)
+      write_to_log(message: ".moderate has already been called on params.require(:#{parent_key}): #{stack_array.join("\n")}",
+                   action: action,
+                   controller: controller_name)
+    end
+
     def non_scalar_value_filter(params, key, controller_name, action)
       if has_key?(key) && !permitted_scalar?(self[key])
         params[key] = self[key].class.new
@@ -50,7 +74,7 @@ module ModerateParameters
     def array_of_permitted_scalars?(value)
       if value.is_a?(Array) && value.all? { |element| permitted_scalar?(element) }
         return true unless block_given?
-        
+
         yield value
       end
     end
