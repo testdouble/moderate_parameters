@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.3.1'
 
-  spec.add_dependency 'actionpack', '>= 4.2', '< 6.1'
+  spec.add_dependency 'actionpack', '>= 4.2', '< 6.2'
   spec.add_dependency 'activemodel', '>= 4.2', '< 6.1'
   spec.add_dependency 'activesupport', '>= 4.2', '< 6.1'
   spec.add_dependency 'railties', '>= 4.2', '< 6.1'
