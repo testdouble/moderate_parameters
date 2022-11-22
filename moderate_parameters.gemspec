@@ -40,6 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'activemodel', '>= 4.2', '< 6.1'
   spec.add_dependency 'activesupport', '>= 4.2', '< 6.1'
   spec.add_dependency 'railties', '>= 4.2', '< 6.1'
+  spec.add_dependency 'nokogiri', '>= 1.13.9'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'pry', '~> 0.12.2'
